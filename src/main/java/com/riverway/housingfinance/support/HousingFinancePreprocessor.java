@@ -2,9 +2,12 @@ package com.riverway.housingfinance.support;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,23 +18,24 @@ public class HousingFinancePreprocessor {
     private Pattern pattern = Pattern.compile("\"([\\d,]+?)\"");
     private static int BASE_YEAR_2016 = 2016;
 
-    public String[] readCsvFile(File csv) {
-        try (InputStream in = new FileInputStream(csv)) {
+    public List<String> readCsv(InputStream in) {
+        List<String> lines = new ArrayList<>();
+        try {
             BufferedReader input = new BufferedReader(new InputStreamReader(in, "x-windows-949"));
             String row = input.readLine();
-            int[] supportAmounts = null;
+            lines.add(row);
             while ((row = input.readLine()) != null) {
                 log.debug("이전 데이터: {}", row);
-                supportAmounts = cleanseData(row);
+                lines.add(verifyBaseYear(row));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return lines;
     }
 
     public int[] cleanseData(String row) {
-        String[] parsedData = verifyBaseYear(row).split(",");
+        String[] parsedData = row.split(",");
         log.debug("완전한 데이터 : {}", parsedData);
         return filterEmptyData(parsedData);
     }

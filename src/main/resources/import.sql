@@ -1,0 +1,8 @@
+INSERT INTO bank VALUES('bnk1001', '주택도시기금')
+INSERT INTO bank VALUES('bnk1002', '국민은행')
+INSERT INTO bank VALUES('bnk1003', '우리은행')
+INSERT INTO bank VALUES('bnk1004', '신한은행')
+INSERT INTO bank VALUES('bnk1005', '한국시티은행')
+INSERT INTO bank VALUES('bnk1006', '농협은행/수협은행')
+INSERT INTO bank VALUES('bnk1007', '외환은행')
+INSERT INTO bank VALUES('bnk1008', '기타은행')
