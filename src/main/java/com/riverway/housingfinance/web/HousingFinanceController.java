@@ -1,5 +1,6 @@
 package com.riverway.housingfinance.web;
 
+import com.riverway.housingfinance.exception.FailedReadCsvFile;
 import com.riverway.housingfinance.service.HousingFinanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,9 @@ public class HousingFinanceController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Void> analyzeCsvFile(MultipartFile csvFile) {
-        log.debug("파일 이름 : {}");
+    public ResponseEntity<Void> uploadCsvFile(MultipartFile csvFile) {
         log.debug("파일 이름 : {}", csvFile.getOriginalFilename());
-        try (InputStream input = csvFile.getInputStream()){
+        try (InputStream input = csvFile.getInputStream()) {
             housingFinanceService.registerData(input);
         } catch (IOException e) {
             e.printStackTrace();
