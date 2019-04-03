@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,10 +31,12 @@ public class HousingFinancePreprocessorTest {
     public void readCsvFile() throws IOException {
         File csv = new ClassPathResource("주택금융신용보증_금융기관별_공급현황.csv").getFile();
         InputStream inputStream = new FileInputStream(csv);
+        MultipartFile multipartFile = new MockMultipartFile("테스트 파일", inputStream);
+
         int csvFileRows = 154;              //title 부분을 제외한 row 수
         int numberOfBanks = 9;
 
-        SupplyStatusData supplyStatusData = preprocessor.read(inputStream);
+        SupplyStatusData supplyStatusData = preprocessor.read(multipartFile);
         List<String> rows = supplyStatusData.getRows();
         List<BankName> bankNames = supplyStatusData.getBankNames();
 
