@@ -2,17 +2,21 @@ package com.riverway.housingfinance.support;
 
 import com.riverway.housingfinance.domain.BankName;
 import com.riverway.housingfinance.domain.SupplyStatusData;
-import com.riverway.housingfinance.dto.MonthlyFinanceDto;
 import com.riverway.housingfinance.exception.FailedReadCsvFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -21,15 +25,16 @@ public class HousingFinancePreprocessor {
     private static final int BASE_YEAR_2016 = 2016;
     private Pattern pattern = Pattern.compile("\"([\\d,]+?)\"");
 
-    public SupplyStatusData read(InputStream in) {
-        try {
+    public SupplyStatusData read(MultipartFile file) {
+        try (InputStream in = file.getInputStream()) {
             BufferedReader input = new BufferedReader(new InputStreamReader(in, "x-windows-949"));
+
             List<BankName> bankNames = readCsvTitle(input);
             List<String> body = readCsvBody(input);
             return new SupplyStatusData(bankNames, body);
         } catch (IOException e) {
             e.printStackTrace();
-            log.info("csv파일을 읽는데 실패하였습니다.");
+            log.info("파일을 읽는데 실패하였습니다.");
             throw new FailedReadCsvFile();
         }
     }
@@ -39,25 +44,10 @@ public class HousingFinancePreprocessor {
         return parseTitle(title);
     }
 
-    //    public List<MonthlyFinanceDto> readCsvBody(BufferedReader input) throws IOException{
-//        List<String> lines = new ArrayList<>();
-////        input.lines().map(row -> verifyBaseYear(row))
-//        String row = "";
-//        while ((row = input.readLine()) != null) {
-//            log.debug("이전 데이터: {}", row);
-//            lines.add(verifyBaseYear(row));
-//        }
-//        return convertToMonthlyDataOfBank(parseTitle(title), lines);
-//    }
-    public List<String> readCsvBody(BufferedReader input) throws IOException {
-        List<String> lines = new ArrayList<>();
-//        input.lines().map(row -> verifyBaseYear(row))
-        String row = "";
-        while ((row = input.readLine()) != null) {
-            log.debug("이전 데이터: {}", row);
-            lines.add(verifyBaseYear(row));
-        }
-        return lines;
+    public List<String> readCsvBody(BufferedReader input) {
+        return input.lines()
+                .map(row -> verifyBaseYear(row))
+                .collect(Collectors.toList());
     }
 
     public String verifyBaseYear(String data) {
@@ -85,7 +75,6 @@ public class HousingFinancePreprocessor {
 
     public String[] cleanseData(String row) {
         String[] parsedData = row.split(",");
-        log.debug("완전한 데이터 : {}", parsedData);
         return filterEmptyData(parsedData);
     }
 
@@ -95,13 +84,6 @@ public class HousingFinancePreprocessor {
                 .toArray(String[]::new);
     }
 
-    public static int[] filterEmptyDataToInt(String row) {
-        return Arrays.stream(row.split(","))
-                .filter(data -> data.length() > 0)
-                .mapToInt(string -> Integer.parseInt(string))
-                .toArray();
-    }
-
     public List<BankName> parseTitle(String title) {
         String[] titles = cleanseData(title);
         List<BankName> bankNames = new ArrayList<>();
@@ -109,5 +91,12 @@ public class HousingFinancePreprocessor {
             bankNames.add(BankName.of(titles[i]));
         }
         return bankNames;
+    }
+
+    public static int[] filterEmptyDataToInt(String row) {
+        return Arrays.stream(row.split(","))
+                .filter(data -> data.length() > 0)
+                .mapToInt(string -> Integer.parseInt(string))
+                .toArray();
     }
 }

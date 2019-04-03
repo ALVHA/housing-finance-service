@@ -27,11 +27,7 @@ public class HousingFinanceController {
     @PostMapping("")
     public ResponseEntity<Void> uploadCsvFile(MultipartFile csvFile) {
         log.debug("파일 이름 : {}", csvFile.getOriginalFilename());
-        try (InputStream input = csvFile.getInputStream()) {
-            housingFinanceService.registerData(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        housingFinanceService.registerData(csvFile);
         URI uri = URI.create("/api/housing/finance");
         return ResponseEntity.created(uri).build();
     }
