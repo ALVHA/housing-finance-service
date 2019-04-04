@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,5 +27,19 @@ public class Bank {
 
     public BankDto toBankDto() {
         return new BankDto(instituteCode, instituteName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bank bank = (Bank) o;
+        return Objects.equals(instituteCode, bank.instituteCode) &&
+                Objects.equals(instituteName, bank.instituteName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(instituteCode, instituteName);
     }
 }
