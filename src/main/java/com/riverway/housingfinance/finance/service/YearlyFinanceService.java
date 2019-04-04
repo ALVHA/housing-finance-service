@@ -5,6 +5,7 @@ import com.riverway.housingfinance.finance.domain.YearlyFinance;
 import com.riverway.housingfinance.finance.domain.repository.YearlyFinanceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,5 +26,9 @@ public class YearlyFinanceService {
                 yearlyFinanceRepository.save(yearlyFinance);
             }
         }
+    }
+
+    public List<YearlyFinance> findYearlyFinances() {
+        return yearlyFinanceRepository.findYear();
     }
 }

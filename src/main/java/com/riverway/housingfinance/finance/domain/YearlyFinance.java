@@ -1,12 +1,18 @@
 package com.riverway.housingfinance.finance.domain;
 
+import com.riverway.housingfinance.bank.BankAmountResponse;
 import com.riverway.housingfinance.bank.domain.Bank;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
+//TODO tostring 지우기
 @Entity
-@AllArgsConstructor
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class YearlyFinance {
 
     @Id
@@ -27,5 +33,13 @@ public class YearlyFinance {
         this.year = year;
         this.amount = amount;
         this.bank = bank;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public BankAmountResponse toBankAmount () {
+        return new BankAmountResponse(bank.getInstituteName(), amount);
     }
 }

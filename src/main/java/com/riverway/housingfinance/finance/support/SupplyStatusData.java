@@ -1,7 +1,7 @@
 package com.riverway.housingfinance.finance.support;
 
-import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.bank.BankName;
+import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.finance.domain.MonthlyFinance;
 import lombok.Getter;
 
