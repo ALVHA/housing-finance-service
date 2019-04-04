@@ -1,7 +1,6 @@
 package com.riverway.housingfinance.web;
 
 
-import com.riverway.housingfinance.dto.BankDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;

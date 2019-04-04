@@ -1,8 +1,8 @@
-package com.riverway.housingfinance.service;
+package com.riverway.housingfinance.finance.service;
 
-import com.riverway.housingfinance.domain.Bank;
-import com.riverway.housingfinance.domain.YearlyFinance;
-import com.riverway.housingfinance.domain.YearlyFinanceRepository;
+import com.riverway.housingfinance.bank.domain.Bank;
+import com.riverway.housingfinance.finance.domain.YearlyFinance;
+import com.riverway.housingfinance.finance.domain.repository.YearlyFinanceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

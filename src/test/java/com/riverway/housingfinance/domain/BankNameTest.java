@@ -1,5 +1,6 @@
 package com.riverway.housingfinance.domain;
 
+import com.riverway.housingfinance.bank.BankName;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

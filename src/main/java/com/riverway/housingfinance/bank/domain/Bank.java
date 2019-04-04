@@ -1,6 +1,7 @@
-package com.riverway.housingfinance.domain;
+package com.riverway.housingfinance.bank.domain;
 
-import com.riverway.housingfinance.dto.BankDto;
+import com.riverway.housingfinance.bank.BankDto;
+import com.riverway.housingfinance.bank.BankName;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

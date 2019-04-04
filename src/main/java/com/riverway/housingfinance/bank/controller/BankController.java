@@ -1,7 +1,7 @@
-package com.riverway.housingfinance.web;
+package com.riverway.housingfinance.bank.controller;
 
-import com.riverway.housingfinance.dto.BankDto;
-import com.riverway.housingfinance.service.BankService;
+import com.riverway.housingfinance.bank.BankDto;
+import com.riverway.housingfinance.bank.service.BankService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,9 @@
-package com.riverway.housingfinance.service;
+package com.riverway.housingfinance.bank.service;
 
-import com.riverway.housingfinance.domain.Bank;
-import com.riverway.housingfinance.domain.BankName;
-import com.riverway.housingfinance.domain.BankRepository;
-import com.riverway.housingfinance.dto.BankDto;
+import com.riverway.housingfinance.bank.BankDto;
+import com.riverway.housingfinance.bank.BankName;
+import com.riverway.housingfinance.bank.domain.BankRepository;
+import com.riverway.housingfinance.bank.domain.Bank;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

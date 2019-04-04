@@ -1,10 +1,11 @@
-package com.riverway.housingfinance.service;
+package com.riverway.housingfinance.finance.service;
 
-import com.riverway.housingfinance.domain.Bank;
-import com.riverway.housingfinance.domain.MonthlyFinance;
-import com.riverway.housingfinance.domain.SupplyStatusData;
-import com.riverway.housingfinance.domain.TotalFinance;
-import com.riverway.housingfinance.support.HousingFinancePreprocessor;
+import com.riverway.housingfinance.bank.domain.Bank;
+import com.riverway.housingfinance.bank.service.BankService;
+import com.riverway.housingfinance.finance.support.SupplyStatusData;
+import com.riverway.housingfinance.finance.support.TotalFinance;
+import com.riverway.housingfinance.finance.domain.MonthlyFinance;
+import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,12 +16,12 @@ import java.util.List;
 @Service
 public class HousingFinanceService {
 
-    private final HousingFinancePreprocessor preprocessor;
+    private final CsvFilePreprocessor preprocessor;
     private final BankService bankService;
     private final MonthlyFinanceService monthlyFinanceService;
     private final YearlyFinanceService yearlyFinanceService;
 
-    public HousingFinanceService(HousingFinancePreprocessor preprocessor
+    public HousingFinanceService(CsvFilePreprocessor preprocessor
             , BankService bankService
             , MonthlyFinanceService monthlyFinanceService
             , YearlyFinanceService yearlyFinanceService) {

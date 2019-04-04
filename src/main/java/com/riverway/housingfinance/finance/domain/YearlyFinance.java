@@ -1,5 +1,6 @@
-package com.riverway.housingfinance.domain;
+package com.riverway.housingfinance.finance.domain;
 
+import com.riverway.housingfinance.bank.domain.Bank;
 import lombok.AllArgsConstructor;
 
 import javax.persistence.*;

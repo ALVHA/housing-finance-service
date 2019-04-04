@@ -1,4 +1,4 @@
-package com.riverway.housingfinance.dto;
+package com.riverway.housingfinance.bank;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

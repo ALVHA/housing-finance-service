@@ -1,4 +1,4 @@
-package com.riverway.housingfinance.domain;
+package com.riverway.housingfinance.bank;
 
 public enum BankName {
 

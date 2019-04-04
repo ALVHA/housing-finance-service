@@ -1,6 +1,6 @@
-package com.riverway.housingfinance.web;
+package com.riverway.housingfinance.finance.controller;
 
-import com.riverway.housingfinance.service.HousingFinanceService;
+import com.riverway.housingfinance.finance.service.HousingFinanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
