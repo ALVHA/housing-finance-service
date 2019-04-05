@@ -1,7 +1,7 @@
 package com.riverway.housingfinance.web;
 
 import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
-import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
+import com.riverway.housingfinance.finance.dto.YearlyTotalAmountsResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
@@ -27,22 +27,22 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    public void getYearlyDataFromBank_test() {
+    public void getYearlyTotalAmountEachBank() {
         registerData();
 
-        ResponseEntity<SupplyStatusByYearResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/yearly/amount", SupplyStatusByYearResponse.class);
+        ResponseEntity<YearlyTotalAmountsResponse> response = template()
+                .getForEntity("/api/housing/finance/banks/yearly/amount", YearlyTotalAmountsResponse.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getSupplyStatus().size()).isEqualTo(13);
     }
 
     @Test
-    public void getLargestAmount_Of_Bank_In_The_Whole_test() {
+    public void getLargestAmountOfAll_test() {
         registerData();
 
         ResponseEntity<LargestAmountResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/yearly/amount/max", LargestAmountResponse.class);
+                .getForEntity("/api/housing/finance/banks/yearly/amount/largest", LargestAmountResponse.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getYear()).isEqualTo(96184);
@@ -54,7 +54,7 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
         registerData();
 
         ResponseEntity<String> response = template()
-                .getForEntity("/api/housing/finance/banks/yearly/amount/exchange", String.class);
+                .getForEntity("/api/housing/finance/banks/exchange/yearly/amount", String.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }

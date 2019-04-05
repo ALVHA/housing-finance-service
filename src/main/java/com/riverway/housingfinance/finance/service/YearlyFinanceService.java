@@ -1,11 +1,11 @@
 package com.riverway.housingfinance.finance.service;
 
 import com.riverway.housingfinance.bank.domain.Bank;
-import com.riverway.housingfinance.finance.domain.MonthlyFinance;
-import com.riverway.housingfinance.finance.domain.YearlyFinance;
+import com.riverway.housingfinance.finance.domain.MonthlyFinanceSupply;
+import com.riverway.housingfinance.finance.domain.YearlyFinanceSupply;
 import com.riverway.housingfinance.finance.domain.repository.YearlyFinanceRepository;
-import com.riverway.housingfinance.finance.dto.AverageAmount;
-import com.riverway.housingfinance.finance.dto.AverageAmountResponse;
+import com.riverway.housingfinance.finance.dto.YearlyAverageAmount;
+import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +13,7 @@ import javax.persistence.EntityExistsException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,37 +25,44 @@ public class YearlyFinanceService {
         this.yearlyFinanceRepository = yearlyFinanceRepository;
     }
 
-    //너무 복잡함 리팩토링 필요
-    public void saveYearlyFinaces(Map<Integer, Map<Bank, List<MonthlyFinance>>> yearlyFinances) {
-        for (Integer year : yearlyFinances.keySet()) {
-            Map<Bank, List<MonthlyFinance>> amountByBank = yearlyFinances.get(year);
-            saveYearlyFinance(year, amountByBank);
+    public void batch(List<MonthlyFinanceSupply> monthlyData) {
+        Map<Integer, Map<Bank, List<MonthlyFinanceSupply>>> annualData = groupMonthlyDataByYear(monthlyData);
+        for (Integer year : annualData.keySet()) {
+            Map<Bank, List<MonthlyFinanceSupply>> amountByBank = annualData.get(year);
+            save(year, amountByBank);
         }
     }
 
-    public void saveYearlyFinance(int year, Map<Bank, List<MonthlyFinance>> amountByBank) {
+    public Map<Integer, Map<Bank, List<MonthlyFinanceSupply>>> groupMonthlyDataByYear(List<MonthlyFinanceSupply> monthlyFinanceSupplies) {
+        return monthlyFinanceSupplies.stream()
+                .collect(Collectors.groupingBy(MonthlyFinanceSupply::getYear,
+                        Collectors.groupingBy(MonthlyFinanceSupply::getBank)));
+    }
+
+    public void save(int year, Map<Bank, List<MonthlyFinanceSupply>> amountByBank) {
         for (Bank bank : amountByBank.keySet()) {
-            Integer amount = amountByBank.get(bank).stream().mapToInt(MonthlyFinance::getAmount).sum();
-            YearlyFinance yearlyFinance = new YearlyFinance(year, amount, bank);
-            yearlyFinanceRepository.save(yearlyFinance);
+            Integer amount = calculateTotal(amountByBank.get(bank));
+            yearlyFinanceRepository.save(new YearlyFinanceSupply(year, amount, bank));
         }
     }
 
-    public List<YearlyFinance> findYearlyFinances() {
-        return yearlyFinanceRepository.findYearlyFinances();
+    public int calculateTotal(List<MonthlyFinanceSupply> amountByBank) {
+        return amountByBank.stream()
+                .mapToInt(MonthlyFinanceSupply::getAmount)
+                .sum();
     }
 
-    public YearlyFinance findLargestAmount() {
+    public YearlyFinanceSupply findLargestOfAll() {
         return yearlyFinanceRepository
-                .findLargestAmount()
+                .findLargestOfAll()
                 .orElseThrow(EntityExistsException::new);
     }
 
-    public AverageAmountResponse findLargestAndSmallest() {
-        YearlyFinance largestValue = yearlyFinanceRepository.findMaxAmountOfExchange();
-        YearlyFinance smallestValue = yearlyFinanceRepository.findMinAmountOfExchange();
+    public BankSupportAmountResponse findLargestAndSmallest() {
+        YearlyFinanceSupply largestValue = yearlyFinanceRepository.findMaxAmountOfExchange();
+        YearlyFinanceSupply smallestValue = yearlyFinanceRepository.findMinAmountOfExchange();
         log.debug("가장 큰값 : {}, 작은값 : {}", largestValue, smallestValue);
-        List<AverageAmount> largeAndSmall = Arrays.asList(largestValue.toAverageAmount(), smallestValue.toAverageAmount());
-        return new AverageAmountResponse("외환은행",largeAndSmall);
+        List<YearlyAverageAmount> largeAndSmall = Arrays.asList(largestValue.toAverageAmount(), smallestValue.toAverageAmount());
+        return new BankSupportAmountResponse("외환은행", largeAndSmall);
     }
 }

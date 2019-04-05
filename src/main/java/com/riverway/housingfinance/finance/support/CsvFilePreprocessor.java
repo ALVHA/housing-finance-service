@@ -29,19 +29,14 @@ public class CsvFilePreprocessor {
         try (InputStream in = file.getInputStream()) {
             BufferedReader input = new BufferedReader(new InputStreamReader(in, "x-windows-949"));
 
-            List<BankName> bankNames = readTitle(input);
+            String title = input.readLine();
             List<String> body = readBody(input);
-            return new SupplyStatusData(bankNames, body);
+            return new SupplyStatusData(title, body);
         } catch (IOException e) {
             e.printStackTrace();
             log.info("파일을 읽는데 실패하였습니다.");
             throw new FailedReadCsvFileException();
         }
-    }
-
-    public List<BankName> readTitle(BufferedReader bufferedReader) throws IOException {
-        String title = bufferedReader.readLine();
-        return parseTitle(title);
     }
 
     public List<String> readBody(BufferedReader input) {
@@ -71,32 +66,5 @@ public class CsvFilePreprocessor {
         }
         parsedData.append(rawData.substring(beforeEndIndex));
         return parsedData.toString();
-    }
-
-    public String[] cleanseData(String row) {
-        String[] parsedData = row.split(",");
-        return filterEmptyData(parsedData);
-    }
-
-    public String[] filterEmptyData(String[] row) {
-        return Arrays.stream(row)
-                .filter(data -> data.length() > 0)
-                .toArray(String[]::new);
-    }
-
-    public List<BankName> parseTitle(String title) {
-        String[] titles = cleanseData(title);
-        List<BankName> bankNames = new ArrayList<>();
-        for (int i = 2; i < titles.length; i++) {
-            bankNames.add(BankName.of(titles[i]));
-        }
-        return bankNames;
-    }
-
-    public static int[] filterEmptyDataToInt(String row) {
-        return Arrays.stream(row.split(","))
-                .filter(data -> data.length() > 0)
-                .mapToInt(string -> Integer.parseInt(string))
-                .toArray();
     }
 }

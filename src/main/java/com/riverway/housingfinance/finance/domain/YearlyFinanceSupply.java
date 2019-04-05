@@ -1,8 +1,8 @@
 package com.riverway.housingfinance.finance.domain;
 
-import com.riverway.housingfinance.bank.BankAmountResponse;
+import com.riverway.housingfinance.bank.BankAmount;
 import com.riverway.housingfinance.bank.domain.Bank;
-import com.riverway.housingfinance.finance.dto.AverageAmount;
+import com.riverway.housingfinance.finance.dto.YearlyAverageAmount;
 import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class YearlyFinance {
+public class YearlyFinanceSupply {
 
     @Id
     @GeneratedValue
@@ -30,7 +30,7 @@ public class YearlyFinance {
     @JoinColumn(name = "bank_id", nullable = false)
     private Bank bank;
 
-    public YearlyFinance(int year, int amount, Bank bank) {
+    public YearlyFinanceSupply(int year, int amount, Bank bank) {
         this.year = year;
         this.amount = amount;
         this.bank = bank;
@@ -40,15 +40,15 @@ public class YearlyFinance {
         return year;
     }
 
-    public BankAmountResponse toBankAmount () {
-        return new BankAmountResponse(bank.getInstituteName(), amount);
+    public BankAmount toBankAmount () {
+        return new BankAmount(bank.getInstituteName(), amount);
     }
 
     public LargestAmountResponse toLargestAmount() {
         return new LargestAmountResponse(year, bank.getInstituteName());
     }
 
-    public AverageAmount toAverageAmount() {
-        return new AverageAmount(year, amount);
+    public YearlyAverageAmount toAverageAmount() {
+        return new YearlyAverageAmount(year, amount);
     }
 }
