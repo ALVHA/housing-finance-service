@@ -1,6 +1,7 @@
 package com.riverway.housingfinance.finance.service;
 
 import com.riverway.housingfinance.bank.domain.Bank;
+import com.riverway.housingfinance.finance.domain.MonthlyFinance;
 import com.riverway.housingfinance.finance.domain.YearlyFinance;
 import com.riverway.housingfinance.finance.domain.repository.YearlyFinanceRepository;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,22 @@ public class YearlyFinanceService {
         this.yearlyFinanceRepository = yearlyFinanceRepository;
     }
 
-    public void saveYearlyFinaces(Map<Integer, Map<Bank, Integer>> yearlyFinances) {
+    public void saveYearlyFinaces(Map<Integer, Map<Bank, List<MonthlyFinance>>> yearlyFinances) {
         for (Integer year : yearlyFinances.keySet()) {
-            Map<Bank, Integer> amountByBank = yearlyFinances.get(year);
-            for (Bank bank : amountByBank.keySet()) {
-                Integer amount = amountByBank.get(bank);
-                YearlyFinance yearlyFinance = new YearlyFinance(year, amount, bank);
-                yearlyFinanceRepository.save(yearlyFinance);
-            }
+            Map<Bank, List<MonthlyFinance>> amountByBank = yearlyFinances.get(year);
+            saveYearlyFinance(year, amountByBank);
+        }
+    }
+
+    public void saveYearlyFinance(int year, Map<Bank, List<MonthlyFinance>> amountByBank) {
+        for (Bank bank : amountByBank.keySet()) {
+            Integer amount = amountByBank.get(bank).stream().mapToInt(MonthlyFinance::getAmount).sum();
+            YearlyFinance yearlyFinance = new YearlyFinance(year, amount, bank);
+            yearlyFinanceRepository.save(yearlyFinance);
         }
     }
 
     public List<YearlyFinance> findYearlyFinances() {
-        return yearlyFinanceRepository.findYear();
+        return yearlyFinanceRepository.findYearlyFinances();
     }
 }

@@ -2,7 +2,7 @@ package com.riverway.housingfinance.support;
 
 import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
-import com.riverway.housingfinance.finance.support.SupplyStatusData;
+import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

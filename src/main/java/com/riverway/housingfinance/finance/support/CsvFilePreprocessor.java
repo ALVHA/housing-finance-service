@@ -2,6 +2,7 @@ package com.riverway.housingfinance.finance.support;
 
 import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.finance.FailedReadCsvFileException;
+import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

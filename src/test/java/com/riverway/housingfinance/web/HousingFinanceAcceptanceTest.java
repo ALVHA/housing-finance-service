@@ -1,7 +1,6 @@
 package com.riverway.housingfinance.web;
 
-import com.riverway.housingfinance.finance.support.SupplyStatusByYearResponse;
-import com.riverway.housingfinance.finance.support.YearlyFinanceResponse;
+import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;

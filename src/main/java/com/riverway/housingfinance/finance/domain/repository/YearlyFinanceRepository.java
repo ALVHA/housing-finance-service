@@ -11,5 +11,5 @@ import java.util.List;
 public interface YearlyFinanceRepository extends JpaRepository<YearlyFinance, Long> {
 
     @Query("SELECT y FROM YearlyFinance y JOIN FETCH y.bank ORDER BY y.year, y.bank.instituteCode")
-    List<YearlyFinance> findYear();
+    List<YearlyFinance> findYearlyFinances();
 }

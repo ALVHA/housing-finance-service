@@ -4,8 +4,8 @@ import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.bank.service.BankService;
 import com.riverway.housingfinance.finance.service.HousingFinanceService;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
-import com.riverway.housingfinance.finance.support.SupplyStatusByYearResponse;
-import com.riverway.housingfinance.finance.support.SupplyStatusData;
+import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
+import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +47,7 @@ public class HousingFinanceController {
 
     @GetMapping("/banks/yearly/amount")
     public ResponseEntity<SupplyStatusByYearResponse> getYearlyDataFromBank() {
-        SupplyStatusByYearResponse response = housingFinanceService.findAll();
+        SupplyStatusByYearResponse response = housingFinanceService.findSupplyStatus();
         return ResponseEntity.ok().body(response);
     }
 }
