@@ -1,7 +1,7 @@
-package com.riverway.housingfinance.service;
+package com.riverway.housingfinance.finance.service;
 
-import com.riverway.housingfinance.domain.MonthlyFinance;
-import com.riverway.housingfinance.domain.MonthlyFinanceRepository;
+import com.riverway.housingfinance.finance.domain.MonthlyFinance;
+import com.riverway.housingfinance.finance.domain.repository.MonthlyFinanceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,5 +1,6 @@
-package com.riverway.housingfinance.domain;
+package com.riverway.housingfinance.finance.domain;
 
+import com.riverway.housingfinance.bank.domain.Bank;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,7 @@ public class MonthlyFinance {
     @Id
     @GeneratedValue
     private Long id;
-    //LocalDateTime 과 int중
+
     @Column(nullable = false)
     private int year;
 
@@ -34,5 +35,17 @@ public class MonthlyFinance {
         this.month = month;
         this.amount = amount;
         this.bank = bank;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 }

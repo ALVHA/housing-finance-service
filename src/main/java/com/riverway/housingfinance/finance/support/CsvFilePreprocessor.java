@@ -1,8 +1,8 @@
-package com.riverway.housingfinance.support;
+package com.riverway.housingfinance.finance.support;
 
-import com.riverway.housingfinance.domain.BankName;
-import com.riverway.housingfinance.domain.SupplyStatusData;
-import com.riverway.housingfinance.exception.FailedReadCsvFile;
+import com.riverway.housingfinance.bank.BankName;
+import com.riverway.housingfinance.finance.FailedReadCsvFileException;
+import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class HousingFinancePreprocessor {
+public class CsvFilePreprocessor {
 
     private static final int BASE_YEAR_2016 = 2016;
     private Pattern pattern = Pattern.compile("\"([\\d,]+?)\"");
@@ -29,22 +29,22 @@ public class HousingFinancePreprocessor {
         try (InputStream in = file.getInputStream()) {
             BufferedReader input = new BufferedReader(new InputStreamReader(in, "x-windows-949"));
 
-            List<BankName> bankNames = readCsvTitle(input);
-            List<String> body = readCsvBody(input);
+            List<BankName> bankNames = readTitle(input);
+            List<String> body = readBody(input);
             return new SupplyStatusData(bankNames, body);
         } catch (IOException e) {
             e.printStackTrace();
             log.info("파일을 읽는데 실패하였습니다.");
-            throw new FailedReadCsvFile();
+            throw new FailedReadCsvFileException();
         }
     }
 
-    public List<BankName> readCsvTitle(BufferedReader bufferedReader) throws IOException {
+    public List<BankName> readTitle(BufferedReader bufferedReader) throws IOException {
         String title = bufferedReader.readLine();
         return parseTitle(title);
     }
 
-    public List<String> readCsvBody(BufferedReader input) {
+    public List<String> readBody(BufferedReader input) {
         return input.lines()
                 .map(row -> verifyBaseYear(row))
                 .collect(Collectors.toList());

@@ -1,11 +1,14 @@
 package com.riverway.housingfinance.support;
 
-import com.riverway.housingfinance.domain.BankName;
-import com.riverway.housingfinance.domain.SupplyStatusData;
+import com.riverway.housingfinance.bank.BankName;
+import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
+import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,23 +19,25 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-public class HousingFinancePreprocessorTest {
+public class CsvFilePreprocessorTest {
 
-    private HousingFinancePreprocessor preprocessor;
+    private CsvFilePreprocessor preprocessor;
 
     @Before
     public void setUp() {
-        preprocessor = new HousingFinancePreprocessor();
+        preprocessor = new CsvFilePreprocessor();
     }
 
     @Test
-    public void readCsvFile() throws IOException {
+    public void read_test() throws IOException {
         File csv = new ClassPathResource("주택금융신용보증_금융기관별_공급현황.csv").getFile();
         InputStream inputStream = new FileInputStream(csv);
+        MultipartFile multipartFile = new MockMultipartFile("테스트 파일", inputStream);
+
         int csvFileRows = 154;              //title 부분을 제외한 row 수
         int numberOfBanks = 9;
 
-        SupplyStatusData supplyStatusData = preprocessor.read(inputStream);
+        SupplyStatusData supplyStatusData = preprocessor.read(multipartFile);
         List<String> rows = supplyStatusData.getRows();
         List<BankName> bankNames = supplyStatusData.getBankNames();
 

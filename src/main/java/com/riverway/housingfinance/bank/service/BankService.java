@@ -1,12 +1,14 @@
-package com.riverway.housingfinance.service;
+package com.riverway.housingfinance.bank.service;
 
-import com.riverway.housingfinance.domain.Bank;
-import com.riverway.housingfinance.domain.BankName;
-import com.riverway.housingfinance.domain.BankRepository;
+import com.riverway.housingfinance.bank.BankDto;
+import com.riverway.housingfinance.bank.BankName;
+import com.riverway.housingfinance.bank.domain.BankRepository;
+import com.riverway.housingfinance.bank.domain.Bank;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,5 +29,12 @@ public class BankService {
         return names.stream()
                 .map(bank -> bank.getBankName())
                 .toArray(String[]::new);
+    }
+
+    public List<BankDto> findListOfBank() {
+        return bankRepository.findAll()
+                .stream()
+                .map(bank-> bank.toBankDto())
+                .collect(Collectors.toList());
     }
 }
