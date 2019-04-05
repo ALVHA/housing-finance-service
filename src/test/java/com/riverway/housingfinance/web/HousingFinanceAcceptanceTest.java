@@ -48,4 +48,14 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
         assertThat(response.getBody().getYear()).isEqualTo(96184);
         assertThat(response.getBody().getBank()).isEqualTo("주택도시기금");
     }
+
+    @Test
+    public void getMaxAndMinValue_외환은행() {
+        registerData();
+
+        ResponseEntity<String> response = template()
+                .getForEntity("/api/housing/finance/banks/yearly/amount/exchange", String.class);
+        log.debug("response : {}", response);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

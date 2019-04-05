@@ -4,10 +4,7 @@ import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.finance.domain.HousingFinanceSupplyStatus;
 import com.riverway.housingfinance.finance.domain.MonthlyFinance;
 import com.riverway.housingfinance.finance.domain.YearlyFinance;
-import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
-import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
-import com.riverway.housingfinance.finance.dto.SupplyStatusData;
-import com.riverway.housingfinance.finance.dto.TotalFinance;
+import com.riverway.housingfinance.finance.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +38,9 @@ public class HousingFinanceService {
 
     public LargestAmountResponse getLargestData() {
         return yearlyFinanceService.findLargestAmount().toLargestAmount();
+    }
+
+    public AverageAmountResponse findLargestAndSmallest(){
+        return yearlyFinanceService.findLargestAndSmallest();
     }
 }

@@ -4,12 +4,17 @@ import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.finance.domain.MonthlyFinance;
 import com.riverway.housingfinance.finance.domain.YearlyFinance;
 import com.riverway.housingfinance.finance.domain.repository.YearlyFinanceRepository;
+import com.riverway.housingfinance.finance.dto.AverageAmount;
+import com.riverway.housingfinance.finance.dto.AverageAmountResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class YearlyFinanceService {
 
@@ -43,5 +48,13 @@ public class YearlyFinanceService {
         return yearlyFinanceRepository
                 .findLargestAmount()
                 .orElseThrow(EntityExistsException::new);
+    }
+
+    public AverageAmountResponse findLargestAndSmallest() {
+        YearlyFinance largestValue = yearlyFinanceRepository.findMaxAmountOfExchange();
+        YearlyFinance smallestValue = yearlyFinanceRepository.findMinAmountOfExchange();
+        log.debug("가장 큰값 : {}, 작은값 : {}", largestValue, smallestValue);
+        List<AverageAmount> largeAndSmall = Arrays.asList(largestValue.toAverageAmount(), smallestValue.toAverageAmount());
+        return new AverageAmountResponse("외환은행",largeAndSmall);
     }
 }

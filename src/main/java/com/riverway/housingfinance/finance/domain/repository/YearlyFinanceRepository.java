@@ -18,4 +18,16 @@ public interface YearlyFinanceRepository extends JpaRepository<YearlyFinance, Lo
             "FROM YearlyFinance y JOIN FETCH y.bank " +
             "WHERE y.amount = (SELECT MAX(amount) FROM y)")
     Optional<YearlyFinance> findLargestAmount();
+
+    @Query("SELECT y " +
+            "FROM YearlyFinance y JOIN FETCH y.bank " +
+            "WHERE y.bank.instituteCode = 'bnk1008' " +
+            "AND y.amount = (SELECT MIN(amount) FROM y WHERE y.bank.instituteCode = 'bnk1008' and YEAR <= 2016)")
+    YearlyFinance findMinAmountOfExchange();
+
+    @Query("SELECT y " +
+            "FROM YearlyFinance y JOIN FETCH y.bank " +
+            "WHERE y.bank.instituteCode = 'bnk1008' " +
+            "AND y.amount = (SELECT MAX(amount) FROM y WHERE y.bank.instituteCode = 'bnk1008' and YEAR <= 2016)")
+    YearlyFinance findMaxAmountOfExchange();
 }
