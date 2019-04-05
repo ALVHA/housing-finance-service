@@ -4,6 +4,7 @@ import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.finance.domain.HousingFinanceSupplyStatus;
 import com.riverway.housingfinance.finance.domain.MonthlyFinance;
 import com.riverway.housingfinance.finance.domain.YearlyFinance;
+import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
 import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import com.riverway.housingfinance.finance.dto.TotalFinance;
@@ -36,5 +37,9 @@ public class HousingFinanceService {
         List<YearlyFinance> yearlyFinances = yearlyFinanceService.findYearlyFinances();
         HousingFinanceSupplyStatus supplyStatus = new HousingFinanceSupplyStatus(yearlyFinances);
         return supplyStatus.toResponse();
+    }
+
+    public LargestAmountResponse getLargestData() {
+        return yearlyFinanceService.findLargestAmount().toLargestAmount();
     }
 }

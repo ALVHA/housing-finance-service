@@ -2,6 +2,7 @@ package com.riverway.housingfinance.finance.controller;
 
 import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.bank.service.BankService;
+import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import com.riverway.housingfinance.finance.service.HousingFinanceService;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
@@ -48,6 +49,12 @@ public class HousingFinanceController {
     @GetMapping("/banks/yearly/amount")
     public ResponseEntity<SupplyStatusByYearResponse> getYearlyDataFromBank() {
         SupplyStatusByYearResponse response = housingFinanceService.findSupplyStatus();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/banks/yearly/amount/max")
+    public ResponseEntity<LargestAmountResponse> getLargestAmount() {
+        LargestAmountResponse response = housingFinanceService.getLargestData();
         return ResponseEntity.ok().body(response);
     }
 }

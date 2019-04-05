@@ -1,5 +1,6 @@
 package com.riverway.housingfinance.web;
 
+import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -34,5 +35,17 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getSupplyStatus().size()).isEqualTo(13);
+    }
+
+    @Test
+    public void getLargestAmount_Of_Bank_In_The_Whole_test() {
+        registerData();
+
+        ResponseEntity<LargestAmountResponse> response = template()
+                .getForEntity("/api/housing/finance/banks/yearly/amount/max", LargestAmountResponse.class);
+        log.debug("response : {}", response);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getYear()).isEqualTo(96184);
+        assertThat(response.getBody().getBank()).isEqualTo("주택도시기금");
     }
 }

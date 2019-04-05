@@ -2,8 +2,8 @@ package com.riverway.housingfinance.finance.domain;
 
 import com.riverway.housingfinance.bank.BankAmountResponse;
 import com.riverway.housingfinance.bank.domain.Bank;
+import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -41,5 +41,9 @@ public class YearlyFinance {
 
     public BankAmountResponse toBankAmount () {
         return new BankAmountResponse(bank.getInstituteName(), amount);
+    }
+
+    public LargestAmountResponse toLargestAmount() {
+        return new LargestAmountResponse(year, bank.getInstituteName());
     }
 }
