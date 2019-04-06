@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MonthlyFinance {
+public class MonthlyFinanceSupply {
 
     @Id
     @GeneratedValue
@@ -30,7 +30,7 @@ public class MonthlyFinance {
     @JoinColumn(name = "bank_id", nullable = false)
     private Bank bank;
 
-    public MonthlyFinance(int year, int month, int amount, Bank bank) {
+    public MonthlyFinanceSupply(int year, int month, int amount, Bank bank) {
         this.year = year;
         this.month = month;
         this.amount = amount;

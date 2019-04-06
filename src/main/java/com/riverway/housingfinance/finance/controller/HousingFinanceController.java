@@ -2,10 +2,13 @@ package com.riverway.housingfinance.finance.controller;
 
 import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.bank.service.BankService;
-import com.riverway.housingfinance.finance.service.HousingFinanceService;
-import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
-import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
+import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
+import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import com.riverway.housingfinance.finance.dto.SupplyStatusData;
+import com.riverway.housingfinance.finance.dto.YearlyTotalAmountsResponse;
+import com.riverway.housingfinance.finance.service.HousingFinanceService;
+import com.riverway.housingfinance.finance.service.YearlyTotalAmountsService;
+import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +27,15 @@ public class HousingFinanceController {
 
     private final BankService bankService;
     private final HousingFinanceService housingFinanceService;
+    private final YearlyTotalAmountsService yearlyTotalAmountsService;
     private final CsvFilePreprocessor preprocessor;
 
     public HousingFinanceController(BankService bankService
             , HousingFinanceService housingFinanceService
-            , CsvFilePreprocessor preprocessor) {
+            , YearlyTotalAmountsService yearlyTotalAmountsService, CsvFilePreprocessor preprocessor) {
         this.bankService = bankService;
         this.housingFinanceService = housingFinanceService;
+        this.yearlyTotalAmountsService = yearlyTotalAmountsService;
         this.preprocessor = preprocessor;
     }
 
@@ -46,8 +51,20 @@ public class HousingFinanceController {
     }
 
     @GetMapping("/banks/yearly/amount")
-    public ResponseEntity<SupplyStatusByYearResponse> getYearlyDataFromBank() {
-        SupplyStatusByYearResponse response = housingFinanceService.findSupplyStatus();
+    public ResponseEntity<YearlyTotalAmountsResponse> getYearlyTotalAmountEachBank() {
+        YearlyTotalAmountsResponse response = yearlyTotalAmountsService.tally();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/banks/yearly/amount/largest")
+    public ResponseEntity<LargestAmountResponse> getLargestAmount() {
+        LargestAmountResponse response = housingFinanceService.findLargestOfAll();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/banks/exchange/yearly/amount")
+    public ResponseEntity<BankSupportAmountResponse> getLagestAndSmallest() {
+        BankSupportAmountResponse response = housingFinanceService.findLargestAndSmallest();
         return ResponseEntity.ok().body(response);
     }
 }

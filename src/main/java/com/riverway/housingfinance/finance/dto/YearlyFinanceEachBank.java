@@ -1,6 +1,6 @@
 package com.riverway.housingfinance.finance.dto;
 
-import com.riverway.housingfinance.bank.BankAmountResponse;
+import com.riverway.housingfinance.bank.BankAmount;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,19 +8,19 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class YearlyFinanceBanksResponse {
+public class YearlyFinanceEachBank {
 
     private int year;
     private int totalAmount;
-    private List<BankAmountResponse> detailAmount;
+    private List<BankAmount> detailAmount;
 
-    public YearlyFinanceBanksResponse(int year, List<BankAmountResponse> detailAmount) {
+    public YearlyFinanceEachBank(int year, List<BankAmount> detailAmount) {
         this.year = year;
         this.totalAmount = calculateTotalAmount(detailAmount);
         this.detailAmount = detailAmount;
     }
 
-    public int calculateTotalAmount(List<BankAmountResponse> detailAmount) {
+    public int calculateTotalAmount(List<BankAmount> detailAmount) {
         return detailAmount
                 .stream()
                 .mapToInt(data -> data.getAmount())

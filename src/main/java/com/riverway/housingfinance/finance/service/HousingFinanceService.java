@@ -1,12 +1,10 @@
 package com.riverway.housingfinance.finance.service;
 
 import com.riverway.housingfinance.bank.domain.Bank;
-import com.riverway.housingfinance.finance.domain.HousingFinanceSupplyStatus;
-import com.riverway.housingfinance.finance.domain.MonthlyFinance;
-import com.riverway.housingfinance.finance.domain.YearlyFinance;
-import com.riverway.housingfinance.finance.dto.SupplyStatusByYearResponse;
+import com.riverway.housingfinance.finance.domain.MonthlyFinanceSupply;
+import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
+import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import com.riverway.housingfinance.finance.dto.SupplyStatusData;
-import com.riverway.housingfinance.finance.dto.TotalFinance;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +23,17 @@ public class HousingFinanceService {
     }
 
     public void registerData(SupplyStatusData supplyStatusData, List<Bank> banks) {
-        TotalFinance totalFinance = supplyStatusData.convertToMonthlyDataOfBank(banks);
-        List<MonthlyFinance> monthlyFinances = totalFinance.getMonthlyFinances();
+        List<MonthlyFinanceSupply> monthlyFinanceSupplies = supplyStatusData.parse(banks);
 
-        monthlyFinanceService.saveAll(monthlyFinances);
-        yearlyFinanceService.saveYearlyFinaces(totalFinance.groupByYearsForTotal());
+        monthlyFinanceService.saveAll(monthlyFinanceSupplies);
+        yearlyFinanceService.batch(monthlyFinanceSupplies);
     }
 
-    public SupplyStatusByYearResponse findSupplyStatus() {
-        List<YearlyFinance> yearlyFinances = yearlyFinanceService.findYearlyFinances();
-        HousingFinanceSupplyStatus supplyStatus = new HousingFinanceSupplyStatus(yearlyFinances);
-        return supplyStatus.toResponse();
+    public LargestAmountResponse findLargestOfAll() {
+        return yearlyFinanceService.findLargestOfAll().toLargestAmount();
+    }
+
+    public BankSupportAmountResponse findLargestAndSmallest() {
+        return yearlyFinanceService.findLargestAndSmallest();
     }
 }

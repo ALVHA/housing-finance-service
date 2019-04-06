@@ -32,12 +32,12 @@ public class CsvFilePreprocessorTest {
     public void read_test() throws IOException {
         File csv = new ClassPathResource("주택금융신용보증_금융기관별_공급현황.csv").getFile();
         InputStream inputStream = new FileInputStream(csv);
-        MultipartFile multipartFile = new MockMultipartFile("테스트 파일", inputStream);
+        MultipartFile csvFile = new MockMultipartFile("테스트 파일", inputStream);
 
         int csvFileRows = 154;              //title 부분을 제외한 row 수
         int numberOfBanks = 9;
 
-        SupplyStatusData supplyStatusData = preprocessor.read(multipartFile);
+        SupplyStatusData supplyStatusData = preprocessor.read(csvFile);
         List<String> rows = supplyStatusData.getRows();
         List<BankName> bankNames = supplyStatusData.getBankNames();
 
@@ -48,13 +48,13 @@ public class CsvFilePreprocessorTest {
     @Test
     public void cleanseData_test_before_2016() {
         String dataRow = "2007,7,1996,444,88,147,10,156,86,106,55,,,,,,,";
-        String[] cleansedData = {"2007", "7", "1996", "444", "88", "147", "10", "156", "86", "106", "55"};
 
-        assertThat(preprocessor.cleanseData(dataRow)).isEqualTo(cleansedData);
+        assertThat(preprocessor.verifyBaseYear(dataRow)).isEqualTo(dataRow
+        );
     }
 
     @Test
-    public void cleanseData_test_after_2016() {
+    public void verifyBaseYear_test_after_2016() {
         String dataRow = "2016,11,\"7,920\",\"3,257\",\"4,078\",\"3,358\",3,\"6,168\",\"1,472\",0,\"11,569\",,,,,,,";
         String cleansedData = "2016,11,7920,3257,4078,3358,3,6168,1472,0,11569,,,,,,,";
 
@@ -82,7 +82,23 @@ public class CsvFilePreprocessorTest {
     }
 
     @Test
-    public void filterEmptyDataToInt_test() {
+    public void cleanseData_test() {
+        String title = "카카오페이,한국은행,신한은행,하나은행,,,,";
+        String[] cleansedTitle = {"카카오페이","한국은행", "신한은행","하나은행"};
+
+        assertThat(preprocessor.cleanseData(title)).isEqualTo(cleansedTitle);
+    }
+
+    @Test
+    public void filterEmptyData_test() {
+        String[] before = {"카카오페이","한국은행", "신한은행","하나은행","","","",""};
+        String[] filtered = {"카카오페이","한국은행", "신한은행","하나은행"};
+
+        assertThat(preprocessor.filterEmptyData(before)).isEqualTo(filtered);
+    }
+
+    @Test
+    public void filterEmptyDataToInt() {
         String data = "2015,1,5065,3335,3731,2675,4,1894,1272,991,2808,,,,,,,";
         int[] filterdData = {2015, 1, 5065, 3335, 3731, 2675, 4, 1894, 1272, 991, 2808};
 

@@ -2,7 +2,7 @@ package com.riverway.housingfinance.finance.dto;
 
 import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.bank.domain.Bank;
-import com.riverway.housingfinance.finance.domain.MonthlyFinance;
+import com.riverway.housingfinance.finance.domain.MonthlyFinanceSupply;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import lombok.Getter;
 
@@ -20,27 +20,9 @@ public class SupplyStatusData {
         this.rows = rows;
     }
 
-//    public TotalFinance convertToMonthlyDataOfBank(List<Bank> banks) {
-//        TotalFinance totalFinance = new TotalFinance();
-//        List<Bank> sortedBanks = sortBank(banks);
-//        for (String row : rows) {
-//            int[] values = CsvFilePreprocessor.filterEmptyDataToInt(row);
-//            for (int i = 2; i < values.length; i++) {
-//                int year = values[0];
-//                int month = values[1];
-//                int amount = values[i];
-//                Bank bank = sortedBanks.get(i - 2);
-//
-//                MonthlyFinance monthlyData = new MonthlyFinance(year, month, amount, bank);
-//                totalFinance.addMonthlyFinance(monthlyData);
-//            }
-//        }
-//        return totalFinance;
-//    }
-
-    public TotalFinance convertToMonthlyDataOfBank(List<Bank> banks) {
+    public List<MonthlyFinanceSupply> parse(List<Bank> banks) {
         List<Bank> sortedBanks = sortBank(banks);
-        List<MonthlyFinance> monthlyFinances = new ArrayList<>();
+        List<MonthlyFinanceSupply> monthlyFinanceSupplies = new ArrayList<>();
         for (String row : rows) {
             int[] values = CsvFilePreprocessor.filterEmptyDataToInt(row);
             for (int i = 2; i < values.length; i++) {
@@ -49,27 +31,18 @@ public class SupplyStatusData {
                 int amount = values[i];
                 Bank bank = sortedBanks.get(i - 2);
 
-                MonthlyFinance monthlyData = new MonthlyFinance(year, month, amount, bank);
-                monthlyFinances.add(monthlyData);
+                MonthlyFinanceSupply monthlyData = new MonthlyFinanceSupply(year, month, amount, bank);
+                monthlyFinanceSupplies.add(monthlyData);
             }
         }
-        return new TotalFinance(monthlyFinances);
+        return monthlyFinanceSupplies;
     }
 
     private List<Bank> sortBank(List<Bank> banks) {
         List<Bank> sortedBanks = new ArrayList<>();
         for (BankName name : bankNames) {
-            sortedBanks.add(find(name, banks));
+            sortedBanks.add(name.match(banks));
         }
         return sortedBanks;
-    }
-
-    private Bank find(BankName name, List<Bank> banks) {
-        for (Bank bank : banks) {
-            if (bank.match(name)) {
-                return bank;
-            }
-        }
-        return null;
     }
 }

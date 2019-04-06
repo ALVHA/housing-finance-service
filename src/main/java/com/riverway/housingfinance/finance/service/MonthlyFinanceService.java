@@ -1,6 +1,6 @@
 package com.riverway.housingfinance.finance.service;
 
-import com.riverway.housingfinance.finance.domain.MonthlyFinance;
+import com.riverway.housingfinance.finance.domain.MonthlyFinanceSupply;
 import com.riverway.housingfinance.finance.domain.repository.MonthlyFinanceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,7 +18,7 @@ public class MonthlyFinanceService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveAll(List<MonthlyFinance> monthlyFinances) {
-        monthlyFinanceRepository.saveAll(monthlyFinances);
+    public void saveAll(List<MonthlyFinanceSupply> monthlyFinanceSupplies) {
+        monthlyFinanceRepository.saveAll(monthlyFinanceSupplies);
     }
 }

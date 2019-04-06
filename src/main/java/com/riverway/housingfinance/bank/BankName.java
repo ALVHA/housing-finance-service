@@ -1,5 +1,9 @@
 package com.riverway.housingfinance.bank;
 
+import com.riverway.housingfinance.bank.domain.Bank;
+
+import java.util.List;
+
 public enum BankName {
 
     JUTAEK("주택도시기금"),
@@ -21,6 +25,14 @@ public enum BankName {
     public String getBankName() {
         return bankName;
     }
+
+    public Bank match(List<Bank> banks) {
+        return banks.stream()
+                .filter(bank -> bank.match(bankName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 은행이 없습니다."));
+    }
+
 
     public static BankName of(String bankName) {
         for (BankName value : values()) {

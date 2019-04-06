@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankAmountResponse {
+public class BankAmount {
 
     private String bankName;
     private int amount;
