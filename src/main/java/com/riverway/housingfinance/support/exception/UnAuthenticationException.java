@@ -1,4 +1,4 @@
-package com.riverway.housingfinance.user;
+package com.riverway.housingfinance.support.exception;
 
 public class UnAuthenticationException extends RuntimeException {
 

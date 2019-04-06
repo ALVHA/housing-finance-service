@@ -1,4 +1,4 @@
-package com.riverway.housingfinance.finance;
+package com.riverway.housingfinance.support.exception;
 
 public class FailedReadCsvFileException extends RuntimeException {
 

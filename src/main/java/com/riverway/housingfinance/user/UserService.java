@@ -1,5 +1,7 @@
 package com.riverway.housingfinance.user;
 
+import com.riverway.housingfinance.support.exception.ErrorMessage;
+import com.riverway.housingfinance.support.exception.UnAuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class UserService {
 
     public void verifyExist(UserDto user) {
         if (userRepository.findByUserId(user.getUserId()).isPresent()) {
-            throw new UnAuthenticationException("이미 존재하는 아이디입니다.");
+            throw new UnAuthenticationException(ErrorMessage.EXIST_ID);
         }
     }
 
@@ -37,6 +39,6 @@ public class UserService {
 
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() ->new EntityNotFoundException(ErrorMessage.NOT_EXIST_USER));
     }
 }

@@ -1,5 +1,7 @@
 package com.riverway.housingfinance.user;
 
+import com.riverway.housingfinance.support.exception.ErrorMessage;
+import com.riverway.housingfinance.support.exception.UnAuthenticationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,14 +32,14 @@ public class User {
         this.password = password;
     }
 
-    public UserDto toUserDto() {
-        return new UserDto(id, userId);
-    }
-
     public boolean matchPassword(String inputPassword, PasswordEncoder passwordEncoder) {
         if (!passwordEncoder.matches(inputPassword, password)) {
-            throw new UnAuthenticationException("비밀번호를 확인해주세요.");
+            throw new UnAuthenticationException(ErrorMessage.WRONG_PASSWORD);
         }
         return true;
+    }
+
+    public UserDto toUserDto() {
+        return new UserDto(id, userId);
     }
 }

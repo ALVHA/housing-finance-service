@@ -1,4 +1,4 @@
-package com.riverway.housingfinance.config;
+package com.riverway.housingfinance.support.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

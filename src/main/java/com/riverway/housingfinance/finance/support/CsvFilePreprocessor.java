@@ -1,7 +1,8 @@
 package com.riverway.housingfinance.finance.support;
 
 import com.riverway.housingfinance.bank.BankName;
-import com.riverway.housingfinance.finance.FailedReadCsvFileException;
+import com.riverway.housingfinance.support.exception.ErrorMessage;
+import com.riverway.housingfinance.support.exception.FailedReadCsvFileException;
 import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,8 +36,8 @@ public class CsvFilePreprocessor {
             return new SupplyStatusData(bankNames, body);
         } catch (IOException e) {
             e.printStackTrace();
-            log.info("파일을 읽는데 실패하였습니다.");
-            throw new FailedReadCsvFileException();
+            log.info("{}", ErrorMessage.READ_FAILED);
+            throw new FailedReadCsvFileException(ErrorMessage.READ_FAILED);
         }
     }
 

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class YearlyFinanceService {
     public YearlyFinanceSupply findLargestOfAll() {
         return yearlyFinanceRepository
                 .findLargestOfAll()
-                .orElseThrow(EntityExistsException::new);
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     //은행으로 찾기

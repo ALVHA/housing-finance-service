@@ -1,6 +1,7 @@
 package com.riverway.housingfinance.bank;
 
 import com.riverway.housingfinance.bank.domain.Bank;
+import com.riverway.housingfinance.support.exception.ErrorMessage;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public enum BankName {
         return banks.stream()
                 .filter(bank -> bank.match(bankName))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 은행이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_MATCH_BANK));
     }
 
 
