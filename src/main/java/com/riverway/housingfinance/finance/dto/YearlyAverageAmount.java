@@ -1,9 +1,10 @@
 package com.riverway.housingfinance.finance.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class YearlyAverageAmount {
 
     private static final int TOTAL_MONTH = 12;

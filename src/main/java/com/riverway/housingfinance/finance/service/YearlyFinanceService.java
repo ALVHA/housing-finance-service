@@ -25,6 +25,7 @@ public class YearlyFinanceService {
         this.yearlyFinanceRepository = yearlyFinanceRepository;
     }
 
+    //List를 객체로 분리
     public void batch(List<MonthlyFinanceSupply> monthlyData) {
         Map<Integer, Map<Bank, List<MonthlyFinanceSupply>>> annualData = groupMonthlyDataByYear(monthlyData);
         for (Integer year : annualData.keySet()) {
@@ -58,11 +59,12 @@ public class YearlyFinanceService {
                 .orElseThrow(EntityExistsException::new);
     }
 
+    //은행으로 찾기
     public BankSupportAmountResponse findLargestAndSmallest() {
-        YearlyFinanceSupply largestValue = yearlyFinanceRepository.findMaxAmountOfExchange();
         YearlyFinanceSupply smallestValue = yearlyFinanceRepository.findMinAmountOfExchange();
+        YearlyFinanceSupply largestValue = yearlyFinanceRepository.findMaxAmountOfExchange();
         log.debug("가장 큰값 : {}, 작은값 : {}", largestValue, smallestValue);
-        List<YearlyAverageAmount> largeAndSmall = Arrays.asList(largestValue.toAverageAmount(), smallestValue.toAverageAmount());
+        List<YearlyAverageAmount> largeAndSmall = Arrays.asList(smallestValue.toAverageAmount(), largestValue.toAverageAmount());
         return new BankSupportAmountResponse("외환은행", largeAndSmall);
     }
 }

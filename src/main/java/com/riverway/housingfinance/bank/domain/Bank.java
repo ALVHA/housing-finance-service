@@ -22,8 +22,8 @@ public class Bank {
     @Column(nullable = false, unique = true)
     private String instituteName;
 
-    public boolean match(BankName bankName) {
-        return instituteName.equals(bankName.getBankName());
+    public boolean match(String bankName) {
+        return instituteName.equals(bankName);
     }
 
     public BankDto toBankDto() {
