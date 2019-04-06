@@ -1,6 +1,7 @@
 package com.riverway.housingfinance.web;
 
 import com.riverway.housingfinance.user.UserDto;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import support.test.AcceptanceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class UserAcceptanceTest extends AcceptanceTest {
 
     @Test
@@ -24,6 +26,8 @@ public class UserAcceptanceTest extends AcceptanceTest {
         UserDto user = registerUser("testUser");
         ResponseEntity<UserDto> response = template().postForEntity("/api/users/auth", user, UserDto.class);
 
+        log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getHeaders().get("Authorization")).isNotNull();
     }
 }

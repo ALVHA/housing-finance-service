@@ -1,5 +1,6 @@
 package com.riverway.housingfinance.user;
 
+import com.riverway.housingfinance.security.JwtManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Slf4j
@@ -17,8 +19,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final JwtManager jwtManager;
+
+    public UserController(UserService userService, JwtManager jwtManager) {
         this.userService = userService;
+        this.jwtManager = jwtManager;
     }
 
     @PostMapping("")
@@ -29,9 +34,10 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<UserDto> login(@RequestBody UserDto loginRequest){
+    public ResponseEntity<UserDto> login(@RequestBody UserDto loginRequest, HttpServletResponse response){
         log.debug("로그인 : {}", loginRequest);
-        UserDto user = userService.login(loginRequest.getUserId(), loginRequest.getPassword());
-        return ResponseEntity.ok().body(user);
+        UserDto loginUser = userService.login(loginRequest.getUserId(), loginRequest.getPassword());
+        response.setHeader("Authorization", jwtManager.createToken(loginUser));
+        return ResponseEntity.ok().body(loginUser);
     }
 }
