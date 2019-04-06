@@ -1,5 +1,6 @@
 package support.test;
 
+import com.riverway.housingfinance.user.UserDto;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,5 +37,20 @@ public abstract class AcceptanceTest {
         HttpEntity<MultiValueMap<String, Object>> request = uploadCsvFileRequest();
         ResponseEntity<String> response = template().postForEntity("/api/housing/finance", request, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    protected UserDto createUserDefault() {
+        return new UserDto("riverway", "password");
+    }
+
+    protected UserDto createUser(String userId) {
+        return new UserDto(userId, "password");
+    }
+
+    protected UserDto registerUser(String userId) {
+        UserDto user = createUser(userId);
+        ResponseEntity<UserDto> response = template().postForEntity("/api/users", user, UserDto.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        return user;
     }
 }

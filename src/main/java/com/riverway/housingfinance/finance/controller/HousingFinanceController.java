@@ -10,6 +10,7 @@ import com.riverway.housingfinance.finance.service.HousingFinanceService;
 import com.riverway.housingfinance.finance.service.YearlyTotalAmountsService;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,9 +46,7 @@ public class HousingFinanceController {
         SupplyStatusData supplyStatusData = preprocessor.read(csvFile);
         List<Bank> banks = bankService.findByNames(supplyStatusData.getBankNames());
         housingFinanceService.registerData(supplyStatusData, banks);
-        //uri 수정 필요
-        URI uri = URI.create("/api/housing/finance");
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/banks/yearly/amount")
