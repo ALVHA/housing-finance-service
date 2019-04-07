@@ -1,7 +1,7 @@
 package support.test;
 
 import com.riverway.housingfinance.security.JwtManager;
-import com.riverway.housingfinance.user.UserDto;
+import com.riverway.housingfinance.user.dto.UserDto;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
 
-    private static String DEFAULT_USER_ID = "riverway";
+    protected static String DEFAULT_USER_ID = "riverway";
 
     @Autowired
     private TestRestTemplate template;
@@ -57,7 +57,7 @@ public abstract class AcceptanceTest {
         return headers;
     }
 
-    protected HttpEntity<MultiValueMap<String, Object>> uploadCsvFileRequest() {
+    protected HttpEntity<MultiValueMap<String, Object>> uploadCsvFileRequestWithToken() {
         ClassPathResource csvFile = new ClassPathResource("주택금융신용보증_금융기관별_공급현황.csv");
         return HtmlFormDataBuilder
                 .multipartFormDataWithToken(createJwt(DEFAULT_USER_ID))
@@ -65,10 +65,19 @@ public abstract class AcceptanceTest {
                 .build();
     }
 
-    protected void registerData() {
-        HttpEntity<MultiValueMap<String, Object>> request = uploadCsvFileRequest();
+    protected HttpEntity<MultiValueMap<String, Object>> uploadCsvFileRequest() {
+        ClassPathResource csvFile = new ClassPathResource("주택금융신용보증_금융기관별_공급현황.csv");
+        return HtmlFormDataBuilder
+                .multipartFormData()
+                .addParameter("csvFile", csvFile)
+                .build();
+    }
+
+    protected String registerData() {
+        HttpEntity<MultiValueMap<String, Object>> request = uploadCsvFileRequestWithToken();
         ResponseEntity<String> response = template().postForEntity("/api/housing/finance", request, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        return response.getHeaders().getLocation().getPath();
     }
 
     protected UserDto createUserDefault() {

@@ -3,7 +3,6 @@ package com.riverway.housingfinance.finance.support;
 import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.support.exception.ErrorMessage;
 import com.riverway.housingfinance.support.exception.FailedReadCsvFileException;
-import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,20 +25,35 @@ public class CsvFilePreprocessor {
     private static final int BASE_YEAR_2016 = 2016;
     private Pattern pattern = Pattern.compile("\"([\\d,]+?)\"");
 
-    public SupplyStatusData read(MultipartFile file) {
+    public HousingFinanceFactory read(MultipartFile file) {
         try (InputStream in = file.getInputStream()) {
             BufferedReader input = new BufferedReader(new InputStreamReader(in, "x-windows-949"));
 
             List<BankName> bankNames = parseTitle(input.readLine());
             List<String> body = readBody(input);
             log.debug("body: {} ", body);
-            return new SupplyStatusData(bankNames, body);
+            return new HousingFinanceFactory(bankNames, body);
         } catch (IOException e) {
             e.printStackTrace();
             log.info("{}", ErrorMessage.READ_FAILED);
             throw new FailedReadCsvFileException(ErrorMessage.READ_FAILED);
         }
     }
+
+//    public List<String> read(MultipartFile file) {
+//        try (InputStream in = file.getInputStream()) {
+//            BufferedReader input = new BufferedReader(new InputStreamReader(in, "x-windows-949"));
+//
+//            List<String> housingFinance = new ArrayList<>();
+//            housingFinance.add(input.readLine());
+//            housingFinance.addAll(readBody(input));
+//            return housingFinance;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            log.info("{}", ErrorMessage.READ_FAILED);
+//            throw new FailedReadCsvFileException(ErrorMessage.READ_FAILED);
+//        }
+//    }
 
     public List<BankName> parseTitle(String title) {
         String[] titles = cleanseData(title);
@@ -96,4 +110,5 @@ public class CsvFilePreprocessor {
                 .mapToInt(string -> Integer.parseInt(string))
                 .toArray();
     }
+
 }

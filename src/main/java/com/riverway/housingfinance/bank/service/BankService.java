@@ -1,14 +1,14 @@
 package com.riverway.housingfinance.bank.service;
 
-import com.riverway.housingfinance.bank.BankDto;
 import com.riverway.housingfinance.bank.BankName;
-import com.riverway.housingfinance.bank.domain.BankRepository;
 import com.riverway.housingfinance.bank.domain.Bank;
+import com.riverway.housingfinance.bank.domain.BankRepository;
+import com.riverway.housingfinance.support.exception.ErrorMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,10 +31,13 @@ public class BankService {
                 .toArray(String[]::new);
     }
 
-    public List<BankDto> findListOfBank() {
-        return bankRepository.findAll()
-                .stream()
-                .map(bank-> bank.toBankDto())
-                .collect(Collectors.toList());
+    public List<Bank> findListOfBank() {
+        return bankRepository.findAll();
+    }
+
+    public Bank findByName(String bankName) {
+        return bankRepository
+                .findByInstituteName(bankName)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.NOT_EXIST_BANK));
     }
 }

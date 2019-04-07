@@ -1,6 +1,8 @@
-package com.riverway.housingfinance.user;
+package com.riverway.housingfinance.user.controller;
 
 import com.riverway.housingfinance.security.JwtManager;
+import com.riverway.housingfinance.user.dto.UserDto;
+import com.riverway.housingfinance.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +29,14 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<UserDto> register(@Valid @RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> register(@Valid @RequestBody UserDto userDto) {
         log.debug("회원가입 : {}", userDto);
         UserDto user = userService.register(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<UserDto> login(@RequestBody UserDto loginRequest, HttpServletResponse response){
+    public ResponseEntity<UserDto> login(@RequestBody UserDto loginRequest, HttpServletResponse response) {
         log.debug("로그인 : {}", loginRequest);
         UserDto loginUser = userService.login(loginRequest.getUserId(), loginRequest.getPassword());
         response.setHeader("Authorization", jwtManager.createToken(loginUser.getUserId()));

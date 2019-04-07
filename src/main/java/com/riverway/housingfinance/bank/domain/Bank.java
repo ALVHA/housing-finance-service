@@ -1,7 +1,5 @@
 package com.riverway.housingfinance.bank.domain;
 
-import com.riverway.housingfinance.bank.BankDto;
-import com.riverway.housingfinance.bank.BankName;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -26,8 +24,8 @@ public class Bank {
         return instituteName.equals(bankName);
     }
 
-    public BankDto toBankDto() {
-        return new BankDto(instituteCode, instituteName);
+    public String getInstituteCode() {
+        return instituteCode;
     }
 
     public String getInstituteName() {

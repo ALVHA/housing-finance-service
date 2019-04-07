@@ -1,5 +1,6 @@
-package com.riverway.housingfinance.user;
+package com.riverway.housingfinance.user.dto;
 
+import com.riverway.housingfinance.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

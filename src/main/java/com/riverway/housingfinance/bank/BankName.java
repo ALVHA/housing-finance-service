@@ -34,7 +34,6 @@ public enum BankName {
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_MATCH_BANK));
     }
 
-
     public static BankName of(String bankName) {
         for (BankName value : values()) {
             if (bankName.startsWith(value.bankName)) {

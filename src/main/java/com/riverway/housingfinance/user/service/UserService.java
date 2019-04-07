@@ -1,7 +1,10 @@
-package com.riverway.housingfinance.user;
+package com.riverway.housingfinance.user.service;
 
 import com.riverway.housingfinance.support.exception.ErrorMessage;
 import com.riverway.housingfinance.support.exception.UnAuthenticationException;
+import com.riverway.housingfinance.user.domain.User;
+import com.riverway.housingfinance.user.domain.UserRepository;
+import com.riverway.housingfinance.user.dto.UserDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +42,6 @@ public class UserService {
 
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId)
-                .orElseThrow(() ->new EntityNotFoundException(ErrorMessage.NOT_EXIST_USER));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.NOT_EXIST_USER));
     }
 }

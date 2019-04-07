@@ -1,6 +1,7 @@
-package com.riverway.housingfinance.bank.domain;
+package com.riverway.housingfinance.domain;
 
 import com.riverway.housingfinance.bank.BankName;
+import com.riverway.housingfinance.bank.domain.Bank;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

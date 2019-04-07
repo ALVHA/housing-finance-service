@@ -1,7 +1,8 @@
-package com.riverway.housingfinance.user;
+package com.riverway.housingfinance.user.domain;
 
 import com.riverway.housingfinance.support.exception.ErrorMessage;
 import com.riverway.housingfinance.support.exception.UnAuthenticationException;
+import com.riverway.housingfinance.user.dto.UserDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

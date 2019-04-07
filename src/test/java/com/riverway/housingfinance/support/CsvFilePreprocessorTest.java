@@ -1,8 +1,8 @@
 package com.riverway.housingfinance.support;
 
 import com.riverway.housingfinance.bank.BankName;
-import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
+import com.riverway.housingfinance.finance.support.HousingFinanceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,9 +37,9 @@ public class CsvFilePreprocessorTest {
         int csvFileRows = 154;              //title 부분을 제외한 row 수
         int numberOfBanks = 9;
 
-        SupplyStatusData supplyStatusData = preprocessor.read(csvFile);
-        List<String> rows = supplyStatusData.getRows();
-        List<BankName> bankNames = supplyStatusData.getBankNames();
+        HousingFinanceFactory housingFinanceFactory = preprocessor.read(csvFile);
+        List<String> rows = housingFinanceFactory.getRows();
+        List<BankName> bankNames = housingFinanceFactory.getBankNames();
 
         assertThat(rows.size()).isEqualTo(csvFileRows);
         assertThat(bankNames.size()).isEqualTo(numberOfBanks);

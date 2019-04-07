@@ -2,7 +2,7 @@ package com.riverway.housingfinance.domain;
 
 import com.riverway.housingfinance.support.exception.ErrorMessage;
 import com.riverway.housingfinance.support.exception.UnAuthenticationException;
-import com.riverway.housingfinance.user.User;
+import com.riverway.housingfinance.user.domain.User;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
