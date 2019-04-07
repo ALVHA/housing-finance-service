@@ -4,8 +4,9 @@ import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
 import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import com.riverway.housingfinance.finance.dto.YearlyAverageAmount;
 import com.riverway.housingfinance.finance.dto.YearlyTotalAmountsResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
-@Slf4j
 public class HousingFinanceAcceptanceTest extends AcceptanceTest {
+
+    private final Logger log = LoggerFactory.getLogger(HousingFinanceAcceptanceTest.class);
 
     @Test
     public void uploadCsvFile() {
@@ -60,9 +62,9 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void getLargestAmountOfAll() {
-        String location= registerData();
+        String location = registerData();
 
-        ResponseEntity<LargestAmountResponse> response = requestGet(location +"/banks/years/amount/largest", jwtEntity(), LargestAmountResponse.class);
+        ResponseEntity<LargestAmountResponse> response = requestGet(location + "/banks/years/amount/largest", jwtEntity(), LargestAmountResponse.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getYear()).isEqualTo(2014);
@@ -73,7 +75,7 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
     public void getMaxAndMinValue_외환은행() {
         String location = registerData();
 
-        ResponseEntity<BankSupportAmountResponse> response = requestGet(location+ "/banks/exchange/years/amount", jwtEntity(), BankSupportAmountResponse.class);
+        ResponseEntity<BankSupportAmountResponse> response = requestGet(location + "/banks/exchange/years/amount", jwtEntity(), BankSupportAmountResponse.class);
         log.debug("response : {}", response);
 
         List<YearlyAverageAmount> data = response.getBody().getSupportAmount();
@@ -91,7 +93,7 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
     public void getMaxAndMinValue_하나은행() {
         String location = registerData();
 
-        ResponseEntity<BankSupportAmountResponse> response = requestGet(location+ "/banks/hana/years/amount", jwtEntity(), BankSupportAmountResponse.class);
+        ResponseEntity<BankSupportAmountResponse> response = requestGet(location + "/banks/hana/years/amount", jwtEntity(), BankSupportAmountResponse.class);
         log.debug("response : {}", response);
 
         List<YearlyAverageAmount> data = response.getBody().getSupportAmount();

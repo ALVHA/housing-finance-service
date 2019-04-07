@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-//TODO Response 객체에 기본 생성자 필요한지?
 @Getter
 @NoArgsConstructor
 public class YearlyTotalAmountsResponse {

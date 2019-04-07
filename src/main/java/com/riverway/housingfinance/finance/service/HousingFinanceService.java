@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Slf4j
 @Service
 public class HousingFinanceService {
 

@@ -4,7 +4,6 @@ import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.finance.domain.YearlyFinanceSupply;
 import com.riverway.housingfinance.finance.support.HousingFinanceFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@Slf4j
 public class HousingFinanceFactoryTest {
 
     private List<BankName> bankNames;

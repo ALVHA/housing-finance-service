@@ -3,7 +3,8 @@ package com.riverway.housingfinance.finance.support;
 import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.support.exception.ErrorMessage;
 import com.riverway.housingfinance.support.exception.FailedReadCsvFileException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,9 +19,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Component
 public class CsvFilePreprocessor {
+
+    private final Logger log = LoggerFactory.getLogger(CsvFilePreprocessor.class);
 
     private static final int BASE_YEAR_2016 = 2016;
     private Pattern pattern = Pattern.compile("\"([\\d,]+?)\"");
@@ -39,21 +41,6 @@ public class CsvFilePreprocessor {
             throw new FailedReadCsvFileException(ErrorMessage.READ_FAILED);
         }
     }
-
-//    public List<String> read(MultipartFile file) {
-//        try (InputStream in = file.getInputStream()) {
-//            BufferedReader input = new BufferedReader(new InputStreamReader(in, "x-windows-949"));
-//
-//            List<String> housingFinance = new ArrayList<>();
-//            housingFinance.add(input.readLine());
-//            housingFinance.addAll(readBody(input));
-//            return housingFinance;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            log.info("{}", ErrorMessage.READ_FAILED);
-//            throw new FailedReadCsvFileException(ErrorMessage.READ_FAILED);
-//        }
-//    }
 
     public List<BankName> parseTitle(String title) {
         String[] titles = cleanseData(title);
@@ -110,5 +97,4 @@ public class CsvFilePreprocessor {
                 .mapToInt(string -> Integer.parseInt(string))
                 .toArray();
     }
-
 }

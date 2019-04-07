@@ -9,14 +9,12 @@ import com.riverway.housingfinance.finance.service.YearlyTotalAmountsService;
 import com.riverway.housingfinance.security.JwtManager;
 import com.riverway.housingfinance.user.domain.User;
 import com.riverway.housingfinance.user.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/housing/finance")
 public class HousingFinanceController {
