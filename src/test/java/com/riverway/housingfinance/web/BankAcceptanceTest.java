@@ -1,8 +1,9 @@
 package com.riverway.housingfinance.web;
 
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import support.test.AcceptanceTest;
@@ -11,8 +12,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 public class BankAcceptanceTest extends AcceptanceTest {
+
+    private final Logger log = LoggerFactory.getLogger(BankAcceptanceTest.class);
 
     @Test
     public void showFinancialInstitutions() {

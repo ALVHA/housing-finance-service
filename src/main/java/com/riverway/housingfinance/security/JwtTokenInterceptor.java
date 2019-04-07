@@ -1,18 +1,20 @@
 package com.riverway.housingfinance.security;
 
+import com.riverway.housingfinance.bank.controller.BankController;
 import com.riverway.housingfinance.support.exception.ErrorMessage;
 import com.riverway.housingfinance.support.exception.JwtAuthorizationException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Slf4j
 @Component
 public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
 
+    private final Logger log = LoggerFactory.getLogger(JwtTokenInterceptor.class);
     private static final String HEADER_AUTH = "Authorization";
 
     private final JwtManager jwtManager;

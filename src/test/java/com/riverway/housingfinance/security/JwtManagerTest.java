@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -19,11 +21,12 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
-@Slf4j
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({JwtManager.class})
 @PowerMockIgnore("javax.crypto.*")
 public class JwtManagerTest {
+
+    private final Logger log = LoggerFactory.getLogger(JwtManager.class);
 
     private static String USER_ID = "riverway";
 

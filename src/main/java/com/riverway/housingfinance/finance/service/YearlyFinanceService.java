@@ -11,7 +11,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
-@Slf4j
 @Service
 public class YearlyFinanceService {
 
@@ -28,10 +27,8 @@ public class YearlyFinanceService {
     }
 
     public BankSupportAmountResponse findLargestAndSmallest(Integer id, String bankId) {
-        log.debug("뱅크 아이디:{}", bankId);
         YearlyFinanceSupply smallestValue = yearlyFinanceRepository.findMinAmountOfExchange(id, bankId);
         YearlyFinanceSupply largestValue = yearlyFinanceRepository.findMaxAmountOfExchange(id, bankId);
-        log.debug("가장 큰값 : {}, 작은값 : {}", largestValue, smallestValue);
         List<YearlyAverageAmount> largeAndSmall = Arrays.asList(smallestValue.toAverageAmount(), largestValue.toAverageAmount());
         return new BankSupportAmountResponse("외환은행", largeAndSmall);
     }
