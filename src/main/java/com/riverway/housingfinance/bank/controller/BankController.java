@@ -1,6 +1,6 @@
 package com.riverway.housingfinance.bank.controller;
 
-import com.riverway.housingfinance.bank.BankDto;
+import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.bank.service.BankService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class BankController {
     }
 
     @GetMapping("/banks")
-    public ResponseEntity<List<BankDto>> showInstitutions() {
-        List<BankDto> banks = bankService.findListOfBank();
+    public ResponseEntity<List<Bank>> showInstitutions() {
+        List<Bank> banks = bankService.findListOfBank();
         log.debug("뱅크 리스트 {}", banks);
         return ResponseEntity.ok().body(banks);
     }

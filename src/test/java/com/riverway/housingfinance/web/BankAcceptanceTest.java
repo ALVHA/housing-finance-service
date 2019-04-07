@@ -15,10 +15,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BankAcceptanceTest extends AcceptanceTest {
 
     @Test
-    public void showFinancialInstitutions_test() {
-        ResponseEntity<List> response = template().getForEntity("/api/housing/finance/banks", List.class);
+    public void showFinancialInstitutions() {
+        ResponseEntity<List> response = requestGet("/api/housing/finance/banks", jwtEntity(), List.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().size()).isEqualTo(9);
+    }
+
+    @Test
+    public void showFinancialInstitutions_no_login() {
+        ResponseEntity<List> response = template().getForEntity("/api/housing/finance/banks", List.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 }

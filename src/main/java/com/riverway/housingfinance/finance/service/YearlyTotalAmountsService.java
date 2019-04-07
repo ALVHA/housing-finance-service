@@ -1,8 +1,8 @@
 package com.riverway.housingfinance.finance.service;
 
-import com.riverway.housingfinance.bank.BankAmount;
 import com.riverway.housingfinance.finance.domain.YearlyFinanceSupply;
 import com.riverway.housingfinance.finance.domain.repository.YearlyFinanceRepository;
+import com.riverway.housingfinance.finance.dto.BankAmount;
 import com.riverway.housingfinance.finance.dto.YearlyFinanceEachBank;
 import com.riverway.housingfinance.finance.dto.YearlyTotalAmountsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,8 @@ public class YearlyTotalAmountsService {
         this.repository = repository;
     }
 
-    public YearlyTotalAmountsResponse tally() {
-        List<YearlyFinanceSupply> supplyStatus = repository.findYearlyFinances();
+    public YearlyTotalAmountsResponse tally(Integer id) {
+        List<YearlyFinanceSupply> supplyStatus = repository.findYearlyFinances(id);
         List<YearlyFinanceEachBank> result = convert(supplyStatus);
         return YearlyTotalAmountsResponse.of(result);
     }

@@ -21,32 +21,48 @@ import static org.junit.Assert.assertTrue;
 public class HousingFinanceAcceptanceTest extends AcceptanceTest {
 
     @Test
-    public void uploadCsvFile_test() {
-        HttpEntity<MultiValueMap<String, Object>> request = uploadCsvFileRequest();
+    public void uploadCsvFile() {
+        HttpEntity<MultiValueMap<String, Object>> request = uploadCsvFileRequestWithToken();
 
         ResponseEntity<String> response = template().postForEntity("/api/housing/finance", request, String.class);
+        log.debug("response : {}", response);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertTrue(response.getHeaders().getLocation().getPath().startsWith("/api/housing/finance"));
     }
 
     @Test
-    public void getYearlyTotalAmountEachBank() {
-        registerData();
+    public void uploadCsvFile_no_login() {
+        HttpEntity<MultiValueMap<String, Object>> request = uploadCsvFileRequest();
 
-        ResponseEntity<YearlyTotalAmountsResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/yearly/amount", YearlyTotalAmountsResponse.class);
+        ResponseEntity<String> response = template().postForEntity("/api/housing/finance", request, String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    public void getYearlyTotalAmountEachBank() {
+        String location = registerData();
+
+        ResponseEntity<YearlyTotalAmountsResponse> response = requestGet(location + "/banks/yearly/amount", jwtEntity(), YearlyTotalAmountsResponse.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getSupplyStatus().size()).isEqualTo(13);
     }
 
     @Test
-    public void getLargestAmountOfAll_test() {
-        registerData();
+    public void getYearlyTotalAmountEachBank_no_login() {
+        String location = registerData();
 
-        ResponseEntity<LargestAmountResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/yearly/amount/largest", LargestAmountResponse.class);
+        ResponseEntity<YearlyTotalAmountsResponse> response = template().getForEntity(location + "/banks/yearly/amount", YearlyTotalAmountsResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    public void getLargestAmountOfAll() {
+        String location= registerData();
+
+        ResponseEntity<LargestAmountResponse> response = requestGet(location +"/banks/yearly/amount/largest", jwtEntity(), LargestAmountResponse.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getYear()).isEqualTo(2014);
@@ -55,10 +71,9 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void getMaxAndMinValue_외환은행() {
-        registerData();
+        String location = registerData();
 
-        ResponseEntity<BankSupportAmountResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/exchange/yearly/amount", BankSupportAmountResponse.class);
+        ResponseEntity<BankSupportAmountResponse> response = requestGet(location+ "/banks/exchange/yearly/amount", jwtEntity(), BankSupportAmountResponse.class);
         log.debug("response : {}", response);
 
         List<YearlyAverageAmount> data = response.getBody().getSupportAmount();
@@ -70,5 +85,23 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
         assertThat(smallest.getAmount()).isEqualTo(78);
         assertThat(largest.getYear()).isEqualTo(2015);
         assertThat(largest.getAmount()).isEqualTo(1702);
+    }
+
+    @Test
+    public void getMaxAndMinValue_하나은행() {
+        String location = registerData();
+
+        ResponseEntity<BankSupportAmountResponse> response = requestGet(location+ "/banks/hana/yearly/amount", jwtEntity(), BankSupportAmountResponse.class);
+        log.debug("response : {}", response);
+
+        List<YearlyAverageAmount> data = response.getBody().getSupportAmount();
+        YearlyAverageAmount smallest = data.get(0);
+        YearlyAverageAmount largest = data.get(1);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(smallest.getYear()).isEqualTo(2009);
+        assertThat(smallest.getAmount()).isEqualTo(102);
+        assertThat(largest.getYear()).isEqualTo(2016);
+        assertThat(largest.getAmount()).isEqualTo(3790);
     }
 }

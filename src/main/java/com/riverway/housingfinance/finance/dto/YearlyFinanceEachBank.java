@@ -1,6 +1,5 @@
 package com.riverway.housingfinance.finance.dto;
 
-import com.riverway.housingfinance.bank.BankAmount;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

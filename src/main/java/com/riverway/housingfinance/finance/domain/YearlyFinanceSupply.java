@@ -1,18 +1,16 @@
 package com.riverway.housingfinance.finance.domain;
 
-import com.riverway.housingfinance.bank.BankAmount;
 import com.riverway.housingfinance.bank.domain.Bank;
-import com.riverway.housingfinance.finance.dto.YearlyAverageAmount;
+import com.riverway.housingfinance.finance.dto.BankAmount;
 import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
+import com.riverway.housingfinance.finance.dto.YearlyAverageAmount;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
-//TODO tostring 지우기
 @Entity
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class YearlyFinanceSupply {
 
@@ -30,17 +28,32 @@ public class YearlyFinanceSupply {
     @JoinColumn(name = "bank_id", nullable = false)
     private Bank bank;
 
-    public YearlyFinanceSupply(int year, int amount, Bank bank) {
+    @ManyToOne
+    @JoinColumn(name = "housing_finance_id")
+    private HousingFinanceFile housingFinance;
+
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "yearly_finance_supply_id")
+    private List<MonthlyFinanceSupply> monthlyFinanceSupplies;
+
+    public YearlyFinanceSupply(int year, Bank bank, List<MonthlyFinanceSupply> monthlyFinanceSupplies) {
         this.year = year;
-        this.amount = amount;
         this.bank = bank;
+        this.monthlyFinanceSupplies = monthlyFinanceSupplies;
+        this.amount = calculateTotal();
+    }
+
+    public int calculateTotal() {
+        return monthlyFinanceSupplies.stream()
+                .mapToInt(MonthlyFinanceSupply::getAmount)
+                .sum();
     }
 
     public int getYear() {
         return year;
     }
 
-    public BankAmount toBankAmount () {
+    public BankAmount toBankAmount() {
         return new BankAmount(bank.getInstituteName(), amount);
     }
 

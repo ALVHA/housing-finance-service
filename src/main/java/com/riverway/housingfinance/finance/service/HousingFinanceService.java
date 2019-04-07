@@ -1,12 +1,18 @@
 package com.riverway.housingfinance.finance.service;
 
 import com.riverway.housingfinance.bank.domain.Bank;
-import com.riverway.housingfinance.finance.domain.MonthlyFinanceSupply;
+import com.riverway.housingfinance.bank.service.BankService;
+import com.riverway.housingfinance.finance.domain.HousingFinanceFile;
+import com.riverway.housingfinance.finance.domain.YearlyFinanceSupply;
+import com.riverway.housingfinance.finance.domain.repository.HousingFinanceFileRepository;
 import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
 import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
-import com.riverway.housingfinance.finance.dto.SupplyStatusData;
+import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
+import com.riverway.housingfinance.finance.support.HousingFinanceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,26 +20,35 @@ import java.util.List;
 @Service
 public class HousingFinanceService {
 
-    private final MonthlyFinanceService monthlyFinanceService;
+    private final BankService bankService;
+    private final HousingFinanceFileRepository fileRepository;
     private final YearlyFinanceService yearlyFinanceService;
+    private final CsvFilePreprocessor preprocessor;
 
-    public HousingFinanceService(MonthlyFinanceService monthlyFinanceService, YearlyFinanceService yearlyFinanceService) {
-        this.monthlyFinanceService = monthlyFinanceService;
+    public HousingFinanceService(BankService bankService, HousingFinanceFileRepository fileRepository, YearlyFinanceService yearlyFinanceService, CsvFilePreprocessor preprocessor) {
+        this.bankService = bankService;
+        this.fileRepository = fileRepository;
         this.yearlyFinanceService = yearlyFinanceService;
+        this.preprocessor = preprocessor;
     }
 
-    public void registerData(SupplyStatusData supplyStatusData, List<Bank> banks) {
-        List<MonthlyFinanceSupply> monthlyFinanceSupplies = supplyStatusData.parse(banks);
-
-        monthlyFinanceService.saveAll(monthlyFinanceSupplies);
-        yearlyFinanceService.batch(monthlyFinanceSupplies);
+    @Transactional
+    public Integer registerData(MultipartFile file) {
+        HousingFinanceFactory housingFinanceFactory = preprocessor.read(file);
+        List<Bank> banks = bankService.findByNames(housingFinanceFactory.getBankNames());
+        List<YearlyFinanceSupply> housingFinanceData = housingFinanceFactory.parse(banks);
+        HousingFinanceFile housingFinanceFile = fileRepository.save(HousingFinanceFile.of(file, housingFinanceData));
+        return housingFinanceFile.getId();
     }
 
-    public LargestAmountResponse findLargestOfAll() {
-        return yearlyFinanceService.findLargestOfAll().toLargestAmount();
+    @Transactional(readOnly = true)
+    public LargestAmountResponse findLargestOfAll(Integer Id) {
+        return yearlyFinanceService.findLargestOfAll(Id).toLargestAmount();
     }
 
-    public BankSupportAmountResponse findLargestAndSmallest() {
-        return yearlyFinanceService.findLargestAndSmallest();
+    @Transactional(readOnly = true)
+    public BankSupportAmountResponse findLargestAndSmallest(Integer id, String bankName) {
+        String bankId = bankService.findByName(bankName).getInstituteCode();
+        return yearlyFinanceService.findLargestAndSmallest(id, bankId);
     }
 }

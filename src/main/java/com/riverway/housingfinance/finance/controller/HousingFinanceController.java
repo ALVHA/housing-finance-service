@@ -1,70 +1,55 @@
 package com.riverway.housingfinance.finance.controller;
 
-import com.riverway.housingfinance.bank.domain.Bank;
-import com.riverway.housingfinance.bank.service.BankService;
+import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
 import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
-import com.riverway.housingfinance.finance.dto.SupplyStatusData;
 import com.riverway.housingfinance.finance.dto.YearlyTotalAmountsResponse;
 import com.riverway.housingfinance.finance.service.HousingFinanceService;
 import com.riverway.housingfinance.finance.service.YearlyTotalAmountsService;
-import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/housing/finance")
 public class HousingFinanceController {
 
-    private final BankService bankService;
     private final HousingFinanceService housingFinanceService;
     private final YearlyTotalAmountsService yearlyTotalAmountsService;
-    private final CsvFilePreprocessor preprocessor;
 
-    public HousingFinanceController(BankService bankService
-            , HousingFinanceService housingFinanceService
-            , YearlyTotalAmountsService yearlyTotalAmountsService, CsvFilePreprocessor preprocessor) {
-        this.bankService = bankService;
+    public HousingFinanceController(HousingFinanceService housingFinanceService, YearlyTotalAmountsService yearlyTotalAmountsService) {
         this.housingFinanceService = housingFinanceService;
         this.yearlyTotalAmountsService = yearlyTotalAmountsService;
-        this.preprocessor = preprocessor;
     }
 
     @PostMapping("")
     public ResponseEntity<Void> uploadCsvFile(MultipartFile csvFile) {
         log.debug("파일 이름 : {}", csvFile.getOriginalFilename());
-        SupplyStatusData supplyStatusData = preprocessor.read(csvFile);
-        List<Bank> banks = bankService.findByNames(supplyStatusData.getBankNames());
-        housingFinanceService.registerData(supplyStatusData, banks);
-        //uri 수정 필요
-        URI uri = URI.create("/api/housing/finance");
+        Integer id = housingFinanceService.registerData(csvFile);
+        URI uri = URI.create(String.format("/api/housing/finance/%d", id));
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping("/banks/yearly/amount")
-    public ResponseEntity<YearlyTotalAmountsResponse> getYearlyTotalAmountEachBank() {
-        YearlyTotalAmountsResponse response = yearlyTotalAmountsService.tally();
+    @GetMapping("/{id}/banks/yearly/amount")
+    public ResponseEntity<YearlyTotalAmountsResponse> getYearlyTotalAmountEachBank(@PathVariable Integer id) {
+        YearlyTotalAmountsResponse response = yearlyTotalAmountsService.tally(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/banks/yearly/amount/largest")
-    public ResponseEntity<LargestAmountResponse> getLargestAmount() {
-        LargestAmountResponse response = housingFinanceService.findLargestOfAll();
+    @GetMapping("/{id}/banks/yearly/amount/largest")
+    public ResponseEntity<LargestAmountResponse> getLargestAmount(@PathVariable Integer id) {
+        LargestAmountResponse response = housingFinanceService.findLargestOfAll(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/banks/exchange/yearly/amount")
-    public ResponseEntity<BankSupportAmountResponse> getLagestAndSmallest() {
-        BankSupportAmountResponse response = housingFinanceService.findLargestAndSmallest();
+    @GetMapping("/{id}/banks/{bankName}/yearly/amount")
+    public ResponseEntity<BankSupportAmountResponse> getLagestAndSmallest(@PathVariable Integer id, @PathVariable String bankName) {
+        BankName bank = BankName.valueOf(bankName.toUpperCase());
+        BankSupportAmountResponse response = housingFinanceService.findLargestAndSmallest(id, bank.getBankName());
         return ResponseEntity.ok().body(response);
     }
 }
