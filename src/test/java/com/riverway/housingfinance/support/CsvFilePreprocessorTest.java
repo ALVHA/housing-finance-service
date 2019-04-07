@@ -3,7 +3,6 @@ package com.riverway.housingfinance.support;
 import com.riverway.housingfinance.bank.BankName;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import com.riverway.housingfinance.finance.support.HousingFinanceFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -18,7 +17,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-4j
 public class CsvFilePreprocessorTest {
 
     private CsvFilePreprocessor preprocessor;
@@ -75,7 +73,6 @@ public class CsvFilePreprocessorTest {
                 "한국시티은행(억원),하나은행(억원),농협은행/수협은행(억원),외환은행(억원),기타은행(억원),,,,,,,";
 
         List<BankName> bankNames = preprocessor.parseTitle(title);
-        log.debug("은행 : {}", bankNames);
 
         assertThat(bankNames.size()).isEqualTo(9);
         assertThat(bankNames.get(5)).isEqualTo(BankName.HANA);
