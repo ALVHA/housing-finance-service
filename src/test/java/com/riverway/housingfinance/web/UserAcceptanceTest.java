@@ -14,7 +14,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void register() {
-        UserDto user = createUserDefault();
+        UserDto user = createUser("testUser");
         ResponseEntity<UserDto> response = template().postForEntity("/api/users", user, UserDto.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);

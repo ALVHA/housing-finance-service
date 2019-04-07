@@ -1,5 +1,6 @@
 package com.riverway.housingfinance.finance.domain;
 
+import com.riverway.housingfinance.user.domain.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,14 +26,19 @@ public class HousingFinanceFile {
     @Column(nullable = false)
     private Long size;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User uploader;
+
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "housing_finance_id")
     private List<YearlyFinanceSupply> yearlyFinanceSupplies;
 
-    private HousingFinanceFile(String originalName, String savedName, Long size, List<YearlyFinanceSupply> yearlyFinanceSupplies) {
+    private HousingFinanceFile(String originalName, String savedName, Long size, User user, List<YearlyFinanceSupply> yearlyFinanceSupplies) {
         this.originalName = originalName;
         this.savedName = savedName.trim();
         this.size = size;
+        this.uploader = user;
         this.yearlyFinanceSupplies = yearlyFinanceSupplies;
     }
 
@@ -40,9 +46,9 @@ public class HousingFinanceFile {
         return id;
     }
 
-    public static HousingFinanceFile of(MultipartFile file, List<YearlyFinanceSupply> yearlyFinanceSupplies) {
+    public static HousingFinanceFile of(MultipartFile file, User user, List<YearlyFinanceSupply> yearlyFinanceSupplies) {
         String originalName = file.getOriginalFilename();
-        return new HousingFinanceFile(originalName, convert(originalName), file.getSize(), yearlyFinanceSupplies);
+        return new HousingFinanceFile(originalName, convert(originalName), file.getSize(), user, yearlyFinanceSupplies);
     }
 
     public static String convert(String file) {

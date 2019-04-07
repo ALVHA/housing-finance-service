@@ -16,7 +16,7 @@ public class JwtAcceptanceTest extends AcceptanceTest {
 
         String token = createJwt(DEFAULT_USER_ID);
         HttpEntity httpEntity = new HttpEntity(refreshHeader(token));
-        ResponseEntity<String> response = requestGet(location + "/banks/yearly/amount", httpEntity, String.class);
+        ResponseEntity<String> response = requestGet(location + "/banks/years/amount", httpEntity, String.class);
 
         log.debug("response : {}", response.getHeaders().get("Authorization"));
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
