@@ -9,6 +9,7 @@ import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
 import com.riverway.housingfinance.finance.dto.LargestAmountResponse;
 import com.riverway.housingfinance.finance.support.CsvFilePreprocessor;
 import com.riverway.housingfinance.finance.support.HousingFinanceFactory;
+import com.riverway.housingfinance.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,11 +34,11 @@ public class HousingFinanceService {
     }
 
     @Transactional
-    public Integer registerData(MultipartFile file) {
+    public Integer registerData(MultipartFile file, User user) {
         HousingFinanceFactory housingFinanceFactory = preprocessor.read(file);
         List<Bank> banks = bankService.findByNames(housingFinanceFactory.getBankNames());
         List<YearlyFinanceSupply> housingFinanceData = housingFinanceFactory.parse(banks);
-        HousingFinanceFile housingFinanceFile = fileRepository.save(HousingFinanceFile.of(file, housingFinanceData));
+        HousingFinanceFile housingFinanceFile = fileRepository.save(HousingFinanceFile.of(file, user, housingFinanceData));
         return housingFinanceFile.getId();
     }
 

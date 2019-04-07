@@ -1,3 +1,5 @@
+INSERT INTO user(id, user_id, password) VALUES(1, 'riverway', '$2a$10$.Cen3b6UG.hlfDFjLXeaNeMrnrstC25.QlcfX.YgjpSCYxKTcvNBa')
+
 INSERT INTO bank VALUES('bnk1001', '주택도시기금')
 INSERT INTO bank VALUES('bnk1002', '국민은행')
 INSERT INTO bank VALUES('bnk1003', '우리은행')
