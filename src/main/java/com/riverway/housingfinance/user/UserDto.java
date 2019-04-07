@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
@@ -17,9 +18,11 @@ public class UserDto {
 
     private Long id;
 
+    @NotNull
     @Size(min = 5, max = 20)
     private String userId;
 
+    @NotNull
     @Size(min = 5, max = 20)
     private String password;
 

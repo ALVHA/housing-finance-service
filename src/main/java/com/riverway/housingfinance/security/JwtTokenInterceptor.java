@@ -22,7 +22,7 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         final String token = request.getHeader(HEADER_AUTH);
         log.debug("Jwt Token : {}", token);
         if (token == null) {
@@ -38,6 +38,6 @@ public class JwtTokenInterceptor extends HandlerInterceptorAdapter {
         }
 
         jwtManager.parse(token);
-        return super.preHandle(request, response, handler);
+        return true;
     }
 }

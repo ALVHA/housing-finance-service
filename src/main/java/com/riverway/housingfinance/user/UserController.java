@@ -37,7 +37,7 @@ public class UserController {
     public ResponseEntity<UserDto> login(@RequestBody UserDto loginRequest, HttpServletResponse response){
         log.debug("로그인 : {}", loginRequest);
         UserDto loginUser = userService.login(loginRequest.getUserId(), loginRequest.getPassword());
-        response.setHeader("Authorization", jwtManager.createToken(loginUser));
+        response.setHeader("Authorization", jwtManager.createToken(loginUser.getUserId()));
         return ResponseEntity.ok().body(loginUser);
     }
 }

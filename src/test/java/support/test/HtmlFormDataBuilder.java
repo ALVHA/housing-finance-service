@@ -30,4 +30,11 @@ public class HtmlFormDataBuilder {
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         return new HtmlFormDataBuilder(headers);
     }
+
+    public static HtmlFormDataBuilder multipartFormDataWithToken(String jwt) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.set("Authorization", jwt);
+        return new HtmlFormDataBuilder(headers);
+    }
 }

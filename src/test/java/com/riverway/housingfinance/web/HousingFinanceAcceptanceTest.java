@@ -34,8 +34,7 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
     public void getYearlyTotalAmountEachBank() {
         registerData();
 
-        ResponseEntity<YearlyTotalAmountsResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/yearly/amount", YearlyTotalAmountsResponse.class);
+        ResponseEntity<YearlyTotalAmountsResponse> response = requestGet("/api/housing/finance/banks/yearly/amount", jwtEntity(), YearlyTotalAmountsResponse.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getSupplyStatus().size()).isEqualTo(13);
@@ -45,8 +44,7 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
     public void getLargestAmountOfAll_test() {
         registerData();
 
-        ResponseEntity<LargestAmountResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/yearly/amount/largest", LargestAmountResponse.class);
+        ResponseEntity<LargestAmountResponse> response = requestGet("/api/housing/finance/banks/yearly/amount/largest", jwtEntity(), LargestAmountResponse.class);
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getYear()).isEqualTo(2014);
@@ -57,8 +55,7 @@ public class HousingFinanceAcceptanceTest extends AcceptanceTest {
     public void getMaxAndMinValue_외환은행() {
         registerData();
 
-        ResponseEntity<BankSupportAmountResponse> response = template()
-                .getForEntity("/api/housing/finance/banks/exchange/yearly/amount", BankSupportAmountResponse.class);
+        ResponseEntity<BankSupportAmountResponse> response = requestGet("/api/housing/finance/banks/exchange/yearly/amount", jwtEntity(), BankSupportAmountResponse.class);
         log.debug("response : {}", response);
 
         List<YearlyAverageAmount> data = response.getBody().getSupportAmount();

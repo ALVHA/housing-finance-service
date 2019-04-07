@@ -22,6 +22,14 @@ public class UserAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    public void register_invaild() {
+        UserDto user = createUser("like");
+        ResponseEntity<UserDto> response = template().postForEntity("/api/users", user, UserDto.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
     public void login() {
         UserDto user = registerUser("testUser");
         ResponseEntity<UserDto> response = template().postForEntity("/api/users/auth", user, UserDto.class);
@@ -29,5 +37,15 @@ public class UserAcceptanceTest extends AcceptanceTest {
         log.debug("response : {}", response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHeaders().get("Authorization")).isNotNull();
+    }
+
+    @Test
+    public void login_fail() {
+        UserDto user = registerUser("testUser2");
+        user.setPassword("1234");
+        ResponseEntity<UserDto> response = template().postForEntity("/api/users/auth", user, UserDto.class);
+
+        log.debug("response : {}", response);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 }

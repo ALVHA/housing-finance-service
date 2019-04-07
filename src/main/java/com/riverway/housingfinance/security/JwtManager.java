@@ -1,12 +1,11 @@
 package com.riverway.housingfinance.security;
 
-import com.riverway.housingfinance.support.exception.CannotGenrateJwtKeyException;
+import com.riverway.housingfinance.support.exception.CannotGenerateJwtKeyException;
 import com.riverway.housingfinance.support.exception.ErrorMessage;
 import com.riverway.housingfinance.support.exception.JwtAuthorizationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -17,12 +16,11 @@ import java.util.Date;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 
-@Slf4j
 @Component
 public class JwtManager {
 
     private static final String ISSUER = "riverway.com";
-    private static final String SALT = "Sea is salt";
+    private static final String SECRET = "Sea is salt";
     public static final String CLAIM_KEY_USER_ID = "userId";
 
     private static final int HOUR = 60 * 60 * 1000;
@@ -41,10 +39,10 @@ public class JwtManager {
 
     private byte[] generateKey() {
         try {
-            byte[] key = SALT.getBytes("UTF-8");
+            byte[] key = SECRET.getBytes("UTF-8");
             return key;
         } catch (UnsupportedEncodingException e) {
-            throw new CannotGenrateJwtKeyException(ErrorMessage.GENERATE_JWT_KEY);
+            throw new CannotGenerateJwtKeyException(ErrorMessage.GENERATE_JWT_KEY);
         }
     }
 
