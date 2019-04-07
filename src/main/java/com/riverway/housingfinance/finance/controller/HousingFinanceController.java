@@ -41,19 +41,19 @@ public class HousingFinanceController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping("/{id}/banks/yearly/amount")
+    @GetMapping("/{id}/banks/years/amount")
     public ResponseEntity<YearlyTotalAmountsResponse> getYearlyTotalAmountEachBank(@PathVariable Integer id) {
         YearlyTotalAmountsResponse response = yearlyTotalAmountsService.tally(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/{id}/banks/yearly/amount/largest")
+    @GetMapping("/{id}/banks/years/amount/largest")
     public ResponseEntity<LargestAmountResponse> getLargestAmount(@PathVariable Integer id) {
         LargestAmountResponse response = housingFinanceService.findLargestOfAll(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/{id}/banks/{bankName}/yearly/amount")
+    @GetMapping("/{id}/banks/{bankName}/years/amount")
     public ResponseEntity<BankSupportAmountResponse> getLagestAndSmallest(@PathVariable Integer id, @PathVariable String bankName) {
         BankName bank = BankName.valueOf(bankName.toUpperCase());
         BankSupportAmountResponse response = housingFinanceService.findLargestAndSmallest(id, bank.getBankName());
