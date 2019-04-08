@@ -48,7 +48,7 @@ public class HousingFinanceService {
 
     @Transactional(readOnly = true)
     public BankSupportAmountResponse findLargestAndSmallest(Integer id, String bankName) {
-        String bankId = bankService.findByName(bankName).getInstituteCode();
-        return yearlyFinanceService.findLargestAndSmallest(id, bankId);
+        Bank bank = bankService.findByName(bankName);
+        return yearlyFinanceService.findLargestAndSmallest(id, bank);
     }
 }
