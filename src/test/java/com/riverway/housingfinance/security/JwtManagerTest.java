@@ -3,7 +3,6 @@ package com.riverway.housingfinance.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,8 +24,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest({JwtManager.class})
 @PowerMockIgnore("javax.crypto.*")
 public class JwtManagerTest {
-
-    private final Logger log = LoggerFactory.getLogger(JwtManager.class);
 
     private static String USER_ID = "riverway";
 
