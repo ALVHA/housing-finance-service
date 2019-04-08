@@ -36,5 +36,9 @@
 * Build Tool - Gradle
 ### 빌드 및 실행 방법
 1. GIt 저장소를 다운로드 혹은 clone
+2. gradlew 파일이 있는 경로에서 ./gradlew build 로 빌드
+3. java -jar build/libs/housingfinance-0.0.1-SNAPSHOT.jar 실행
+4. http://localhost:8080/h2-console 접속해 내용 확인
+5. JDBC : jdbc:h2:~/housingfinance
 ### 테이블 구조 
 ![housingfinance](https://user-images.githubusercontent.com/36291553/55689707-df83e000-59c2-11e9-8f31-22b05d4296c1.png)
