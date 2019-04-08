@@ -1,5 +1,6 @@
 package com.riverway.housingfinance.finance.service;
 
+import com.riverway.housingfinance.bank.domain.Bank;
 import com.riverway.housingfinance.finance.domain.YearlyFinanceSupply;
 import com.riverway.housingfinance.finance.domain.repository.YearlyFinanceRepository;
 import com.riverway.housingfinance.finance.dto.BankSupportAmountResponse;
@@ -26,10 +27,11 @@ public class YearlyFinanceService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public BankSupportAmountResponse findLargestAndSmallest(Integer id, String bankId) {
+    public BankSupportAmountResponse findLargestAndSmallest(Integer id, Bank bank) {
+        String bankId = bank.getInstituteCode();
         YearlyFinanceSupply smallestValue = yearlyFinanceRepository.findMinAmountOfExchange(id, bankId);
         YearlyFinanceSupply largestValue = yearlyFinanceRepository.findMaxAmountOfExchange(id, bankId);
         List<YearlyAverageAmount> largeAndSmall = Arrays.asList(smallestValue.toAverageAmount(), largestValue.toAverageAmount());
-        return new BankSupportAmountResponse("외환은행", largeAndSmall);
+        return new BankSupportAmountResponse(bank.getInstituteName(), largeAndSmall);
     }
 }
