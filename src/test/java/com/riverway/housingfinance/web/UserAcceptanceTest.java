@@ -33,7 +33,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void login() {
-        UserDto user = registerUser("testUser");
+        UserDto user = registerUser("testUser2");
         ResponseEntity<UserDto> response = template().postForEntity("/api/users/auth", user, UserDto.class);
 
         log.debug("response : {}", response);
@@ -43,7 +43,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void login_fail() {
-        UserDto user = registerUser("testUser2");
+        UserDto user = registerUser("testUser3");
         user.setPassword("1234");
         ResponseEntity<UserDto> response = template().postForEntity("/api/users/auth", user, UserDto.class);
 
