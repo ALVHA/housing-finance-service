@@ -1,5 +1,4 @@
-# housing-finance-service
-주택 금융 서비스 API
+# Housing-Finance-Service API
 ## 문제해결 전략
 ### 데이터 파일을 DB에 저장
 #### csv파일 파싱
